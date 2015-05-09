@@ -26,4 +26,4 @@ SVGCanvas.prototype.getContext = function(type) {
     return this.ctx;
 };
 
-moudle.exports = SVGCanvas;
+module.exports = SVGCanvas;
