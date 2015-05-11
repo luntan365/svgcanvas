@@ -1008,7 +1008,6 @@ define(function() {
         });
 
         ["getBoundingClientRect"].forEach(function(fn) {
-            console.log(fn);
             _this[fn] = function() {
                 return svg[fn]();
             };
