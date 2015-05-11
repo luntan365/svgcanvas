@@ -876,6 +876,7 @@ define(function() {
         ctx.prototype.globalCompositeOperation = function(){};
         ctx.prototype.arcTo = function(){};
         ctx.prototype.setTransform = function(){};
+        C2S = ctx;
     }());
     var Context = function(width, height) {
         C2S.call(this);

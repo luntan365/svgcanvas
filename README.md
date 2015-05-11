@@ -4,9 +4,11 @@ Mock &lt;canvas> element using &lt;svg> (based on gliffy's canvas2svg).
 
 ## Difference from canvas2svg
 
-- canvas2svg mocks only context API while this library also mocks <canvas> element
+- this library also mocks <canvas> element while canvas2svg mocks only context API
 
     You can set canvas.width, canvas.height and canvas.style and this will be synced to the svg element.
+
+- this library will try to gc invisible elements to improve perfermance
 
 ## Features
 
