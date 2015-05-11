@@ -17,6 +17,14 @@ Context.prototype.__createElement = function(elementName, properties, resetFill)
 };
 
 Context.prototype.gc = function() {
+    if (this.__groupStack.length > 0) {
+        // we are between ctx.save() and ctx.restore, skip gc
+        return;
+    }
+    if (this.__currentElement.nodeName !== 'path') {
+        // we are still in path, skip gc
+        return;
+    }
     this.generations.push([]);
     var deadGeneration = this.generations.shift();
     setTimeout(function() {
