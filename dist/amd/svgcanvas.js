@@ -1,6 +1,5 @@
 define(function() {
     var C2S;
-
     /*!!
      *  Canvas 2 Svg v1.0.6
      *  A low level canvas to SVG converter. Uses a mock canvas context to build an SVG document.
@@ -13,12 +12,9 @@ define(function() {
      *
      *  Copyright (c) 2014 Gliffy Inc.
      */
-
     ;(function() {
         "use strict";
-
         var STYLES, ctx, CanvasGradient, CanvasPattern, namedEntities;
-
         //helper function to format a string
         function format(str, args) {
             var keys = Object.keys(args), i;
@@ -27,7 +23,6 @@ define(function() {
             }
             return str;
         }
-
         //helper function that generates a random string
         function randomString(holder) {
             var chars, randomstring, i;
@@ -44,7 +39,6 @@ define(function() {
             } while (holder[randomstring]);
             return randomstring;
         }
-
         //helper function to map named to numbered entities
         function createNamedToNumberedLookup(items, radix) {
             var i, entity, lookup = {}, base10, base16;
@@ -60,21 +54,18 @@ define(function() {
             lookup["\\xa0"] = '&#160;';
             return lookup;
         }
-
         //helper function to map canvas-textAlign to svg-textAnchor
         function getTextAnchor(textAlign) {
             //TODO: support rtl languages
             var mapping = {"left":"start", "right":"end", "center":"middle", "start":"start", "end":"end"};
             return mapping[textAlign] || mapping.start;
         }
-
         //helper function to map canvas-textBaseline to svg-dominantBaseline
         function getDominantBaseline(textBaseline) {
             //INFO: not supported in all browsers
             var mapping = {"alphabetic": "alphabetic", "hanging": "hanging", "top":"text-before-edge", "bottom":"text-after-edge", "middle":"central"};
             return mapping[textBaseline] || mapping.alphabetic;
         }
-
         // Unpack entities lookup where the numbers are in radix 32 to reduce the size
         // entity mapping courtesy of tinymce
         namedEntities = createNamedToNumberedLookup(
@@ -103,8 +94,6 @@ define(function() {
                 'Scaron,b1,scaron,bo,Yuml,m6,circ,ms,tilde,802,ensp,803,emsp,809,thinsp,80c,zwnj,80d,zwj,80e,lrm,' +
                 '80f,rlm,80j,ndash,80k,mdash,80o,lsquo,80p,rsquo,80q,sbquo,80s,ldquo,80t,rdquo,80u,bdquo,810,dagger,' +
                 '811,Dagger,81g,permil,81p,lsaquo,81q,rsaquo,85c,euro', 32);
-
-
         //Some basic mappings for attributes and default values.
         STYLES = {
             "strokeStyle":{
@@ -172,7 +161,6 @@ define(function() {
                 canvas : "alphabetic"
             }
         };
-
         /**
          *
          * @param gradientNode - reference to the gradient
@@ -181,7 +169,6 @@ define(function() {
         CanvasGradient = function(gradientNode) {
             this.__root = gradientNode;
         };
-
         /**
          * Adds a color stop to the gradient root
          */
@@ -199,12 +186,10 @@ define(function() {
             }
             this.__root.appendChild(stop);
         };
-
         CanvasPattern = function(pattern, ctx) {
             this.__root = pattern;
             this.__ctx = ctx;
         };
-
         /**
          * The mock canvas context
          * @param o - options include:
@@ -213,9 +198,7 @@ define(function() {
          * enableMirroring - enables canvas mirroring (get image data) (defaults to false)
          */
         ctx = function(o) {
-
             var defaultOptions = { width:500, height:500, enableMirroring : false }, options;
-
             //keep support for this way of calling C2S: new C2S(width,height)
             if(arguments.length > 1) {
                 options = defaultOptions;
@@ -226,25 +209,20 @@ define(function() {
             } else {
                 options = o;
             }
-
             if(!(this instanceof ctx)) {
                 //did someone call this without new?
                 return new ctx(options);
             }
-
             //setup options
             this.width = options.width || defaultOptions.width;
             this.height = options.height || defaultOptions.height;
             this.enableMirroring = options.enableMirroring !== undefined ? options.enableMirroring : defaultOptions.enableMirroring;
-
             this.canvas = this;   ///point back to this instance!
             this.__canvas = document.createElement("canvas");
             this.__ctx = this.__canvas.getContext("2d");
-
             this.__setDefaultStyles();
             this.__stack = [this.__getStyleState()];
             this.__groupStack = [];
-
             //the root svg element
             this.__root = document.createElementNS("http://www.w3.org/2000/svg", "svg");
             this.__root.setAttribute("version", 1.1);
@@ -252,20 +230,15 @@ define(function() {
             this.__root.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:xlink", "http://www.w3.org/1999/xlink");
             this.__root.setAttribute("width", this.width);
             this.__root.setAttribute("height", this.height);
-
             //make sure we don't generate the same ids in defs
             this.__ids = {};
-
             //defs tag
             this.__defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
             this.__root.appendChild(this.__defs);
-
             //also add a group child. the svg element can't use the transform attribute
             this.__currentElement = document.createElementNS("http://www.w3.org/2000/svg", "g");
             this.__root.appendChild(this.__currentElement);
-
         };
-
         /**
          * Creates the specified svg element
          * @private
@@ -284,7 +257,6 @@ define(function() {
             }
             return element;
         };
-
         /**
          * Applies default canvas styles to the context
          * @private
@@ -297,7 +269,6 @@ define(function() {
                 this[key] = STYLES[key].canvas;
             }
         };
-
         /**
          * Applies styles on restore
          * @param styleState
@@ -310,7 +281,6 @@ define(function() {
                 this[key] = styleState[key];
             }
         };
-
         /**
          * Gets the current style state
          * @return {Object}
@@ -324,7 +294,6 @@ define(function() {
             }
             return styleState;
         };
-
         /**
          * Apples the current styles to the current SVG element. On "ctx.fill" or "ctx.stroke"
          * @param type
@@ -366,9 +335,7 @@ define(function() {
                     }
                 }
             }
-
         };
-
         /**
          * Will return the closest group or svg node. May return the current element.
          * @private
@@ -381,7 +348,6 @@ define(function() {
                 return this.__closestGroupOrSvg(node.parentNode);
             }
         };
-
         /**
          * Returns the serialized value of the svg so far
          * @param fixNamedEntities - Standalone SVG doesn't support named entities, which document.createTextNode encodes.
@@ -391,13 +357,11 @@ define(function() {
         ctx.prototype.getSerializedSvg = function(fixNamedEntities) {
             var serialized = new XMLSerializer().serializeToString(this.__root),
                 keys, i, key, value, regexp, xmlns;
-
             //IE search for a duplicate xmnls because they didn't implement setAttributeNS correctly
             xmlns = /xmlns="http:\/\/www\.w3\.org\/2000\/svg".+xmlns="http:\/\/www\.w3\.org\/2000\/svg/gi;
             if(xmlns.test(serialized)) {
                 serialized = serialized.replace('xmlns="http://www.w3.org/2000/svg','xmlns:xlink="http://www.w3.org/1999/xlink');
             }
-
             if(fixNamedEntities) {
                 keys = Object.keys(namedEntities);
                 //loop over each named entity and replace with the proper equivalent.
@@ -410,11 +374,8 @@ define(function() {
                     }
                 }
             }
-
             return serialized;
         };
-
-
         /**
          * Returns the root svg
          * @return
@@ -439,15 +400,12 @@ define(function() {
             this.__currentElement = this.__groupStack.pop();
             var state = this.__stack.pop();
             this.__applyStyleState(state);
-
         };
-
         /**
          * Helper method to add transform
          * @private
          */
         ctx.prototype.__addTransform = function(t) {
-
             //if the current element has siblings, add another group
             var parent = this.__closestGroupOrSvg();
             if(parent.childNodes.length > 0) {
@@ -455,7 +413,6 @@ define(function() {
                 parent.appendChild(group);
                 this.__currentElement = group;
             }
-
             var transform = this.__currentElement.getAttribute("transform");
             if(transform) {
                 transform += " ";
@@ -465,7 +422,6 @@ define(function() {
             transform += t;
             this.__currentElement.setAttribute("transform", transform);
         };
-
         /**
          *  scales the current element
          */
@@ -475,7 +431,6 @@ define(function() {
             }
             this.__addTransform(format("scale({x},{y})", {x:x, y:y}));
         };
-
         /**
          * rotates the current element
          */
@@ -483,21 +438,18 @@ define(function() {
             var degrees = (angle * 180 / Math.PI);
             this.__addTransform(format("rotate({angle},{cx},{cy})", {angle:degrees, cx:0, cy:0}));
         };
-
         /**
          * translates the current element
          */
         ctx.prototype.translate = function(x, y){
             this.__addTransform(format("translate({x},{y})", {x:x,y:y}));
         };
-
         /**
          * applies a transform to the current element
          */
         ctx.prototype.transform = function(a, b, c, d, e, f){
             this.__addTransform(format("matrix({a},{b},{c},{d},{e},{f})", {a:a, b:b, c:c, d:d, e:e, f:f}));
         };
-
         /**
          * Create a new Path Element
          */
@@ -508,7 +460,6 @@ define(function() {
             parent.appendChild(path);
             this.__currentElement = path;
         };
-
         /**
          * Helper function to add path command
          * @private
@@ -527,7 +478,6 @@ define(function() {
                 throw new Error("Attempted to add path command to node " + this.__currentElement.nodeName);
             }
         };
-
         /**
          * Adds the move command to the current path element,
          * if the currentPathElement is not empty create a new path element
@@ -538,21 +488,18 @@ define(function() {
             }
             this.__addPathCommand(format("M {x} {y}", {x:x, y:y}));
         };
-
         /**
          * Closes the current path
          */
         ctx.prototype.closePath = function(){
             this.__addPathCommand("Z");
         };
-
         /**
          * Adds a line to command
          */
         ctx.prototype.lineTo = function(x, y){
             this.__addPathCommand(format("L {x} {y}", {x:x, y:y}));
         };
-
         /**
          * Add a bezier command
          */
@@ -560,28 +507,24 @@ define(function() {
             this.__addPathCommand(format("C {cp1x} {cp1y} {cp2x} {cp2y} {x} {y}",
                 {cp1x:cp1x, cp1y:cp1y, cp2x:cp2x, cp2y:cp2y, x:x, y:y}));
         };
-
         /**
          * Adds a quadratic curve to command
          */
         ctx.prototype.quadraticCurveTo = function(cpx, cpy, x, y){
             this.__addPathCommand(format("Q {cpx} {cpy} {x} {y}", {cpx:cpx, cpy:cpy, x:x, y:y}));
         };
-
         /**
          * Sets the stroke property on the current element
          */
         ctx.prototype.stroke = function(){
             this.__applyStyleToCurrentElement("stroke");
         };
-
         /**
          * Sets fill properties on the current element
          */
         ctx.prototype.fill = function(){
             this.__applyStyleToCurrentElement("fill");
         };
-
         /**
          *  Adds a rectangle to the path.
          */
@@ -596,8 +539,6 @@ define(function() {
             this.lineTo(x, y);
             this.closePath();
         };
-
-
         /**
          * adds a rectangle element
          */
@@ -614,7 +555,6 @@ define(function() {
             this.__currentElement = rect;
             this.__applyStyleToCurrentElement("fill");
         };
-
         /**
          * Draws a rectangle with no fill
          * @param x
@@ -635,8 +575,6 @@ define(function() {
             this.__currentElement = rect;
             this.__applyStyleToCurrentElement("stroke");
         };
-
-
         /**
          * "Clears" a canvas by just drawing a white rectangle in the current group.
          */
@@ -651,7 +589,6 @@ define(function() {
             }, true);
             parent.appendChild(rect);
         };
-
         /**
          * Adds a linear gradient to a defs tag.
          * Returns a canvas gradient object that has a reference to it's parent def
@@ -668,7 +605,6 @@ define(function() {
             this.__defs.appendChild(grad);
             return new CanvasGradient(grad);
         };
-
         /**
          * Adds a radial gradient to a defs tag.
          * Returns a canvas gradient object that has a reference to it's parent def
@@ -685,9 +621,7 @@ define(function() {
             }, false);
             this.__defs.appendChild(grad);
             return new CanvasGradient(grad);
-
         };
-
         /**
          * Parses the font string and returns svg mapping
          * @private
@@ -703,20 +637,16 @@ define(function() {
                 decoration : fontPart[2] || 'normal',
                 href : null
             };
-
             //canvas doesn't support underline natively, but we can pass this attribute
             if(this.__fontUnderline === "underline") {
                 data.decoration = "underline";
             }
-
             //canvas also doesn't support linking, but we can pass this as well
             if(this.__fontHref) {
                 data.href = this.__fontHref;
             }
-
             return data;
         };
-
         /**
          * Helper to link text fragments
          * @param font
@@ -733,7 +663,6 @@ define(function() {
             }
             return element;
         };
-
         /**
          * Fills or strokes text
          * @param text
@@ -756,13 +685,11 @@ define(function() {
                     "text-anchor": getTextAnchor(this.textAlign),
                     "dominant-baseline": getDominantBaseline(this.textBaseline)
                 }, true);
-
             textElement.appendChild(document.createTextNode(text));
             this.__currentElement = textElement;
             this.__applyStyleToCurrentElement(action);
             parent.appendChild(this.__wrapTextLink(font,textElement));
         };
-
         /**
          * Creates a text element
          * @param text
@@ -772,7 +699,6 @@ define(function() {
         ctx.prototype.fillText = function(text, x, y){
             this.__applyText(text, x, y, "fill");
         };
-
         /**
          * Strokes text
          * @param text
@@ -782,7 +708,6 @@ define(function() {
         ctx.prototype.strokeText = function(text, x, y){
             this.__applyText(text, x, y, "stroke");
         };
-
         /**
          * No need to implement this for svg.
          * @param text
@@ -792,7 +717,6 @@ define(function() {
             this.__ctx.font = this.font;
             return this.__ctx.measureText(text);
         };
-
         /**
          *  Arc command!
          */
@@ -810,24 +734,19 @@ define(function() {
                 sweepFlag = counterClockwise ? 0 : 1,
                 largeArcFlag = 0,
                 diff = endAngle - startAngle;
-
             // https://github.com/gliffy/canvas2svg/issues/4
             if(diff < 0) {
                 diff += 2*Math.PI;
             }
-
             if(counterClockwise) {
                 largeArcFlag = diff > Math.PI ? 0 : 1;
             } else {
                 largeArcFlag = diff > Math.PI ? 1 : 0;
             }
-
             this.moveTo(startX, startY);
             this.__addPathCommand(format("A {rx} {ry} {xAxisRotation} {largeArcFlag} {sweepFlag} {endX} {endY}",
                 {rx:radius, ry:radius, xAxisRotation:0, largeArcFlag:largeArcFlag, sweepFlag:sweepFlag, endX:endX, endY:endY}));
-
         };
-
         /**
          * Generates a ClipPath from the clip command.
          */
@@ -836,24 +755,17 @@ define(function() {
                 clipPath = document.createElementNS("http://www.w3.org/2000/svg", "clipPath"),
                 id =  randomString(this.__ids),
                 newGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
-
             group.removeChild(this.__currentElement);
             clipPath.setAttribute("id", id);
             clipPath.appendChild(this.__currentElement);
-
             this.__defs.appendChild(clipPath);
-
             //set the clip path to this group
             group.setAttribute("clip-path", format("url(#{id})", {id:id}));
-
             //clip paths can be scaled and transformed, we need to add another wrapper group to avoid later transformations
             // to this path
             group.appendChild(newGroup);
-
             this.__currentElement = newGroup;
-
         };
-
         /**
          * Draws a canvas, image or mock context to this canvas.
          * Note that all svg dom manipulation uses node.childNodes rather than node.children for IE support.
@@ -865,7 +777,6 @@ define(function() {
                 image=args[0],
                 dx, dy, dw, dh, sx=0, sy=0, sw, sh, parent, svg, defs, group,
                 currentElement, svgImage, canvas, context, id;
-
             if(args.length === 3) {
                 dx = args[1];
                 dy = args[2];
@@ -892,10 +803,8 @@ define(function() {
             } else {
                 throw new Error("Inavlid number of arguments passed to drawImage: " + arguments.length);
             }
-
             parent = this.__closestGroupOrSvg();
             currentElement = this.__currentElement;
-
             if(image instanceof ctx) {
                 //canvas2svg mock canvas context. In the future we may want to clone nodes instead.
                 //also I'm currently ignoring dw, dh, sw, sh, sx, sy for a mock context.
@@ -917,7 +826,6 @@ define(function() {
                 svgImage.setAttribute("width", dw);
                 svgImage.setAttribute("height", dh);
                 svgImage.setAttribute("preserveAspectRatio", "none");
-
                 if(sx || sy || sw !== image.width || sh !== image.height) {
                     //crop the image using a temporary canvas
                     canvas = document.createElement("canvas");
@@ -927,7 +835,6 @@ define(function() {
                     context.drawImage(image, sx, sy, sw, sh, 0, 0, dw, dh);
                     image = canvas;
                 }
-
                 svgImage.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href",
                     image.nodeName === "CANVAS" ? image.toDataURL() : image.getAttribute("src"));
                 parent.appendChild(svgImage);
@@ -936,7 +843,6 @@ define(function() {
                 this.__currentElement = currentElement;
             }
         };
-
         /**
          * Generates a pattern tag
          */
@@ -960,7 +866,6 @@ define(function() {
             }
             return new CanvasPattern(pattern, this);
         };
-
         /**
          * Not yet implemented
          */
@@ -971,20 +876,47 @@ define(function() {
         ctx.prototype.globalCompositeOperation = function(){};
         ctx.prototype.arcTo = function(){};
         ctx.prototype.setTransform = function(){};
-
-        C2S = ctx;
-
     }());
-    var Context = require('./context');
-
+    var Context = function(width, height) {
+        C2S.call(this);
+        this.__width = width;
+        this.__height = height;
+        this.generations = [[]]; // used to collect element references for different generations
+    };
+    Context.prototype = Object.create(C2S.prototype);
+    Context.prototype.__createElement = function(elementName, properties, resetFill) {
+        var element = C2S.prototype.__createElement.call(this, elementName, properties, resetFill);
+        var currentGeneration = this.generations[this.generations.length];
+        currentGeneration.push(element);
+        return element;
+    };
+    Context.prototype.gc = function() {
+        this.generations.push([]);
+        var deadGeneration = this.generations.shift();
+        setTimeout(function() {
+            deadGeneration.forEach(function(element) {
+                element.remove();
+            });
+        }, 100);
+    };
+    Context.prototype.clearRect = function(x, y, w, h) {
+        if (x === 0 && y === 0 && w === this.__width && h === this.__height) {
+            this.gc();
+        }
+        C2S.prototype.clearRect.call(this, x, y, w, h);
+    };
+    Context.prototype.fillRect = function(x, y, w, h) {
+        if (x === 0 && y === 0 && w === this.width && h === this.height) {
+            this.gc();
+        }
+        C2S.prototype.fillRect.call(this, x, y, w, h);
+    };
     function SVGCanvas() {
         this.ctx = new Context();
         this.svg = this.ctx.__root;
-
         // sync attributes to svg
         var svg = this.svg;
         var _this = this;
-
         Object.defineProperty(this, 'className', {
             get: function() {
                 return svg.getAttribute('class') || '';
@@ -993,7 +925,6 @@ define(function() {
                 return svg.setAttribute('class', val);
             }
         });
-
         ["width", "height"].forEach(function(prop) {
             Object.defineProperty(_this, prop, {
                 get: function() {
@@ -1007,7 +938,6 @@ define(function() {
                 }
             });
         });
-
         ["style", "id"].forEach(function(prop) {
             Object.defineProperty(_this, prop, {
                 get: function() {
@@ -1020,19 +950,16 @@ define(function() {
                 }
             });
         });
-
         ["getBoundingClientRect"].forEach(function(fn) {
             _this[fn] = function() {
                 return svg[fn]();
             };
         });
     }
-
     SVGCanvas.prototype.getContext = function(type) {
         if (type !== '2d') {
             throw new Error('Unsupported type of context for SVGCanvas');
         }
-
         return this.ctx;
     };
     return SVGCanvas;

@@ -1017,6 +1017,8 @@ Context.prototype.fillRect = function(x, y, w, h) {
     C2S.prototype.fillRect.call(this, x, y, w, h);
 };
 
+module.exports = Context;
+
 },{"./canvas2svg":1}],3:[function(require,module,exports){
 var Context = require('./context');
 
