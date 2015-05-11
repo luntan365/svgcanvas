@@ -1002,7 +1002,7 @@ Context.prototype.gc = function() {
         // we are between ctx.save() and ctx.restore, skip gc
         return;
     }
-    if (this.__currentElement.nodeName !== 'path') {
+    if (this.__currentElement.nodeName === 'path') {
         // we are still in path, skip gc
         return;
     }
