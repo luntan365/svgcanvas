@@ -8,6 +8,20 @@ Mock &lt;canvas> element using &lt;svg> (based on gliffy's canvas2svg).
 
     You can set canvas.width, canvas.height and canvas.style and this will be synced to the svg element.
 
-## Status
+## Features
 
-Working on it.
+```javascript
+var svgcanvas = new SVGCanvas();
+svgcanvas.width = 100;
+var height = svgcanvas.height;
+```
+
+- svgcanvas.width
+
+- svgcanvas.height
+
+- svgcanvas.style
+
+- svgcanvas.getContext('2d')
+
+- svgcanvas.getBoundingClientRect()

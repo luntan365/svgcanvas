@@ -16,6 +16,12 @@ function SVGCanvas() {
             }
         });
     });
+
+    ["getBoundingClientRect"].forEach(function(fn) {
+        this[fn] = function() {
+            return svg[fn]();
+        };
+    });
 }
 
 SVGCanvas.prototype.getContext = function(type) {
