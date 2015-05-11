@@ -22,6 +22,10 @@ var height = svgcanvas.height;
 
 - svgcanvas.style
 
+- svgcanvas.className
+
+- svgcanvas.id
+
 - svgcanvas.getContext('2d')
 
 - svgcanvas.getBoundingClientRect()
