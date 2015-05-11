@@ -11,7 +11,7 @@ Context.prototype = Object.create(C2S.prototype);
 
 Context.prototype.__createElement = function(elementName, properties, resetFill) {
     var element = C2S.prototype.__createElement.call(this, elementName, properties, resetFill);
-    var currentGeneration = this.generations[this.generations.length];
+    var currentGeneration = this.generations[this.generations.length - 1];
     currentGeneration.push(element);
     return element;
 };
@@ -34,7 +34,7 @@ Context.prototype.clearRect = function(x, y, w, h) {
 };
 
 Context.prototype.fillRect = function(x, y, w, h) {
-    if (x === 0 && y === 0 && w === this.width && h === this.height) {
+    if (x === 0 && y === 0 && w === this.__width && h === this.__height) {
         this.gc();
     }
     C2S.prototype.fillRect.call(this, x, y, w, h);

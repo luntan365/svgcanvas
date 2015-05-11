@@ -24,8 +24,8 @@ function SVGCanvas() {
             },
             set: function(val) {
                 if (typeof val !== "undefined") {
-                    return svg.setAttribute(prop, val);
                     _this.ctx['__'+prop] = val;
+                    return svg.setAttribute(prop, val);
                 }
             }
         });
