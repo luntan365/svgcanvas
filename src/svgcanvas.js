@@ -1,7 +1,7 @@
-var C2S = require('./canvas2svg');
+var Context = require('./context');
 
 function SVGCanvas() {
-    this.ctx = new C2S();
+    this.ctx = new Context();
     this.svg = this.ctx.__root;
 
     // sync attributes to svg
@@ -25,6 +25,7 @@ function SVGCanvas() {
             set: function(val) {
                 if (typeof val !== "undefined") {
                     return svg.setAttribute(prop, val);
+                    _this.ctx['__'+prop] = val;
                 }
             }
         });

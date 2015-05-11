@@ -975,10 +975,10 @@ define(function() {
         C2S = ctx;
 
     }());
-
+    var Context = require('./context');
 
     function SVGCanvas() {
-        this.ctx = new C2S();
+        this.ctx = new Context();
         this.svg = this.ctx.__root;
 
         // sync attributes to svg
@@ -1002,6 +1002,7 @@ define(function() {
                 set: function(val) {
                     if (typeof val !== "undefined") {
                         return svg.setAttribute(prop, val);
+                        _this.ctx['__'+prop] = val;
                     }
                 }
             });
