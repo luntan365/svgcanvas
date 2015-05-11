@@ -997,7 +997,7 @@ define(function() {
         ["width", "height", "style", "id"].forEach(function(prop) {
             Object.defineProperty(_this, prop, {
                 get: function() {
-                    return svg[prop];
+                    return svg.getAttribute(prop);
                 },
                 set: function(val) {
                     if (typeof val !== "undefined") {
