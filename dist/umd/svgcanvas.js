@@ -998,21 +998,49 @@ Context.prototype.__createElement = function(elementName, properties, resetFill)
 };
 
 Context.prototype.gc = function() {
-    if (this.__groupStack.length > 0) {
-        // we are between ctx.save() and ctx.restore, skip gc
-        return;
-    }
-    if (this.__currentElement.nodeName === 'path') {
-        // we are still in path, skip gc
-        return;
-    }
     this.generations.push([]);
-    var deadGeneration = this.generations.shift();
+    var ctx = this;
+    // make sure it happens after current job done
+    // for example: in p5.js's redraw use setTimeout will make gc called after both save() and restore() called
     setTimeout(function() {
-        deadGeneration.forEach(function(element) {
-            element.remove();
-        });
-    }, 100);
+        if (ctx.__currentElement.nodeName === 'path') {
+            // we are still in path, skip gc
+            return;
+        }
+        // keep only latest generation
+        while (ctx.generations.length > 1) {
+            var elements = ctx.generations.shift();
+            var lastCount = 0;
+            var count = elements.length;
+            while (count > 0) {
+                lastCount = count;
+                elements = elements.filter(function(elem) {
+                    // in case children may from live generation, gc from bottom to top
+                    if (elem.children.length === 0) {
+                        elem.remove();
+                        return false;
+                    } else {
+                        return true;
+                    }
+                });
+                count = elements.length;
+                if (count === lastCount) {
+                    // could not gc more, exit now
+                    // save this elements to live generation
+                    var liveGeneration = ctx.generations[ctx.generations.length - 1];
+                    elements.forEach(function(elem) {
+                        liveGeneration.push(elem);
+                    });
+                    // exit
+                    break;
+                }
+            }
+        }
+    }, 0);
+    // if (this.__groupStack.length > 0) {
+    //     // we are between ctx.save() and ctx.restore, skip gc
+    //     return;
+    // }
 };
 
 Context.prototype.clearRect = function(x, y, w, h) {
