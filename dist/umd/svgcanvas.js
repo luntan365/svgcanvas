@@ -1053,6 +1053,10 @@ Context.prototype.clearRect = function(x, y, w, h) {
                 }
             });
         });
+        this.generations = [[]];
+        var g = this.__createElement('g');
+        this.__root.appendChild(g);
+        this.__currentElement = g;
     } else {
         C2S.prototype.clearRect.call(this, x, y, w, h);
     }
