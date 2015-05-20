@@ -31,3 +31,5 @@ var height = svgcanvas.height;
 - svgcanvas.getContext('2d')
 
 - svgcanvas.getBoundingClientRect()
+
+- [TODO] canvas.toDataURL()
