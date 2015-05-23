@@ -22,6 +22,7 @@ svgcanvas.toDataURL('image/jpeg', function(err, jpeg) {
 ## Features
 
 - It will gc some invisible elements to save resources
+
     When fillRect or clearRect called, if its args matches `0, 0, canvas.width, canvas.height`
 
 - svgcanvas.width
@@ -40,7 +41,13 @@ svgcanvas.toDataURL('image/jpeg', function(err, jpeg) {
 
 - canvas.toDataURL()
 
-        Note: this is implemented in async way (due to image.onload issue)
+    Note: this is implemented in async way (due to image.onload issue)
+
+## Unit Test
+
+See p5.js-svg's Unit Test:
+
+http://zenozeng.github.io/p5.js-svg/test/
 
 ## License
 
