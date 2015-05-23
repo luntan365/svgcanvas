@@ -1,6 +1,6 @@
 !function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.SVGCanvas=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 /*!!
- *  Canvas 2 Svg v1.0.6 (Modified Version)
+ *  Canvas 2 Svg v1.0.8
  *  A low level canvas to SVG converter. Uses a mock canvas context to build an SVG document.
  *
  *  Licensed under the MIT license:
@@ -58,14 +58,14 @@
         lookup["\\xa0"] = '&#160;';
         return lookup;
     }
-    
+
     //helper function to map canvas-textAlign to svg-textAnchor
     function getTextAnchor(textAlign) {
         //TODO: support rtl languages
         var mapping = {"left":"start", "right":"end", "center":"middle", "start":"start", "end":"end"};
         return mapping[textAlign] || mapping.start;
     }
-    
+
     //helper function to map canvas-textBaseline to svg-dominantBaseline
     function getDominantBaseline(textBaseline) {
         //INFO: not supported in all browsers
@@ -261,7 +261,6 @@
         //also add a group child. the svg element can't use the transform attribute
         this.__currentElement = document.createElementNS("http://www.w3.org/2000/svg", "g");
         this.__root.appendChild(this.__currentElement);
-
     };
 
     /**
@@ -505,6 +504,11 @@
      */
     ctx.prototype.beginPath = function(){
         var path, parent;
+
+        // Note that there is only one current default path, it is not part of the drawing state.
+        // See also: https://html.spec.whatwg.org/multipage/scripting.html#current-default-path
+        this.__currentDefaultPath = "";
+
         path = this.__createElement("path", {}, true);
         parent = this.__closestGroupOrSvg();
         parent.appendChild(path);
@@ -512,22 +516,25 @@
     };
 
     /**
+     * Helper function to apply currentDefaultPath to current path element
+     * @private
+     */
+    ctx.prototype.__applyCurrentDefaultPath = function() {
+        if(this.__currentElement.nodeName === "path") {
+            var d = this.__currentDefaultPath;
+            this.__currentElement.setAttribute("d", d);
+        } else {
+            throw new Error("Attempted to apply path command to node " + this.__currentElement.nodeName);
+        }
+    };
+
+    /**
      * Helper function to add path command
      * @private
      */
     ctx.prototype.__addPathCommand = function(command){
-        if(this.__currentElement.nodeName === "path") {
-            var d = this.__currentElement.getAttribute("d");
-            if(d) {
-                d += " ";
-            } else {
-                d = "";
-            }
-            d += command;
-            this.__currentElement.setAttribute("d", d);
-        } else {
-            throw new Error("Attempted to add path command to node " + this.__currentElement.nodeName);
-        }
+        this.__currentDefaultPath += " ";
+        this.__currentDefaultPath += command;
     };
 
     /**
@@ -574,6 +581,7 @@
      * Sets the stroke property on the current element
      */
     ctx.prototype.stroke = function(){
+        this.__applyCurrentDefaultPath();
         this.__applyStyleToCurrentElement("stroke");
     };
 
@@ -581,6 +589,7 @@
      * Sets fill properties on the current element
      */
     ctx.prototype.fill = function(){
+        this.__applyCurrentDefaultPath();
         this.__applyStyleToCurrentElement("fill");
     };
 
@@ -705,12 +714,12 @@
             decoration : fontPart[2] || 'normal',
             href : null
         };
-        
+
         //canvas doesn't support underline natively, but we can pass this attribute
         if(this.__fontUnderline === "underline") {
             data.decoration = "underline";
         }
-        
+
         //canvas also doesn't support linking, but we can pass this as well
         if(this.__fontHref) {
             data.href = this.__fontHref;
@@ -974,6 +983,7 @@
     ctx.prototype.arcTo = function(){};
     ctx.prototype.setTransform = function(){};
 
+    //add options for alternative namespace
     module.exports = ctx;
 
 }());
