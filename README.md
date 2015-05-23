@@ -39,7 +39,8 @@ svgcanvas.toDataURL('image/jpeg', function(err, jpeg) {
 - svgcanvas.getBoundingClientRect()
 
 - canvas.toDataURL()
-  Note: this is implemented in async way (due to image.onload issue)
+
+        Note: this is implemented in async way (due to image.onload issue)
 
 ## License
 
