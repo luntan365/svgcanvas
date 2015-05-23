@@ -43,6 +43,10 @@ svgcanvas.toDataURL('image/jpeg', function(err, jpeg) {
 
     Note: this is implemented in async way (due to image.onload issue)
 
+- ctx.imageSmoothingEnabled
+
+    Note: this is implemented using `properties["shape-rendering"] = "crispEdges"`
+
 ## Unit Test
 
 See p5.js-svg's Unit Test:
