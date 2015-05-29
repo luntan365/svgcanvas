@@ -49,7 +49,6 @@ var Context = function(width, height, options) {
                     _this.__history.shift();
                 }
 
-                console.debug('svgcanvas context: ', call);
                 return fn.apply(_this, arguments);
             };
         });
