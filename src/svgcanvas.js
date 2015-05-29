@@ -1,7 +1,10 @@
 var Context = require('./context');
 
-function SVGCanvas() {
-    this.ctx = new Context();
+function SVGCanvas(options) {
+
+    var debug = options && options.debug;
+
+    this.ctx = new Context(100, 100, {debug: debug});
     this.svg = this.ctx.__root;
 
     // sync attributes to svg
