@@ -25,6 +25,8 @@ svgcanvas.toDataURL('image/jpeg', function(err, jpeg) {
 
     When fillRect or clearRect called, if its args matches `0, 0, canvas.width, canvas.height`
 
+- Simple value check for fillStyle, strokeStyle
+
 - svgcanvas.width
 
 - svgcanvas.height
