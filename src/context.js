@@ -38,6 +38,19 @@ var Context = function(width, height, options) {
                 }
             }
         }
+        ["fillStyle", "strokeStyle"].forEach(function(prop) {
+            Object.defineProperty(_this, prop, {
+                get: function() {
+                    return _this["__ctx__" + prop];
+                },
+                set: function(val) {
+                    var call = prop + " = " + val;
+                    _this.__history.push(call);
+                    console.debug('svgcanvas: ', call);
+                    _this["__ctx__" + prop] = val;
+                }
+            });
+        });
         methods.forEach(function(method) {
             var fn = _this[method];
             _this[method] = function() {
