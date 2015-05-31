@@ -33,7 +33,8 @@ var Context = function(width, height, options) {
             },
             set: function(val) {
                 if (val.indexOf('NaN') > -1) {
-                    throw new Error("svgcanvas: invalid value for " + prop + ", fail to set it to " + val);
+                    console.warn("svgcanvas: invalid value for " + prop + ", fail to set it to " + val);
+                    return;
                 }
                 _this[key] = val;
             }
