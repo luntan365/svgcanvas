@@ -1,8 +1,8 @@
 (function(global) {
-    global.testRender = function(describe, render) {
-        global.describe(describe, function() {
 
-            var title = document.createElement('h2');
+    global.testRender = function(describe, render) {
+        it(describe, function() {
+            var title = document.createElement('h3');
             title.innerHTML = describe;
 
             var canvas = document.createElement('canvas');
@@ -21,9 +21,7 @@
                 canvas.height = 100;
                 return render(canvas.getContext('2d'), canvas);
             });
-
-            it('should have same behavior in SVG and Canvas', function() {
-            });
         });
     };
+
 })(this);
