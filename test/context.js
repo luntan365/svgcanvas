@@ -11,22 +11,22 @@ describe('Context API', function() {
         // See also: https://github.com/gliffy/canvas2svg/pull/20
         testRender('ctx.stroke and ctx.closePath: including Z', function(ctx) {
             ctx.strokeStyle = '#000';
-            ctx.lineWidth = 5;
+            ctx.lineWidth = 20;
             ctx.beginPath();
-            ctx.moveTo(10,10);
-            ctx.lineTo(30, 30);
-            ctx.lineTo(60, 10);
+            ctx.moveTo(20, 20);
+            ctx.lineTo(50, 50);
+            ctx.lineTo(80, 20);
             ctx.stroke(); // currentDefaultPath not including the final Z
             ctx.closePath();
         });
         // See also: https://github.com/gliffy/canvas2svg/pull/20
         testRender('ctx.stroke and ctx.closePath: excluding Z', function(ctx) {
             ctx.strokeStyle = '#000';
-            ctx.lineWidth = 5;
+            ctx.lineWidth = 10;
             ctx.beginPath();
-            ctx.moveTo(10,10);
-            ctx.lineTo(30, 30);
-            ctx.lineTo(60, 10);
+            ctx.moveTo(20, 20);
+            ctx.lineTo(50, 50);
+            ctx.lineTo(80, 20);
             ctx.closePath();
             ctx.stroke(); // currentDefaultPath including the final Z
         });
@@ -36,6 +36,7 @@ describe('Context API', function() {
         // Example from https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/arcTo
         testRender('arcTo', function(ctx) {
             ctx.beginPath();
+            ctx.lineWidth = 3;
             ctx.moveTo(75, 10);
             ctx.arcTo(75, 50, 25, 10, 15);
             ctx.strokeStyle = 'black';
