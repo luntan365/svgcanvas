@@ -13,3 +13,6 @@ canvas, svg {
     font-size: 12px;
     color: #999;
 }
+.progress canvas {
+    box-shadow: none;
+}
