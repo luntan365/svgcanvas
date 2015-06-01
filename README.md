@@ -7,7 +7,7 @@ You should use [gliffy's canvas2svg](https://github.com/gliffy/canvas2svg) if wh
 
 The major difference is that: this lib also adds some mock API for **element** (such as width, height, style, className, getBoundingClientRect, toDataURL).
 
-Note this lib also adds some dark API (such as context API call history for debug, gc some invisible elements). These API are some how very dark, so I did not pull request for these API. However, they are useful and necessary for my [p5.js-svg](https://github.com/zenozeng/p5.js-svg), so I keep them in my lib.
+Note this lib also adds some dirty API (such as context API call history for debug, gc some invisible elements). These API are some how very dirty, so I did not pull request for these API. However, they are useful and necessary for my [p5.js-svg](https://github.com/zenozeng/p5.js-svg), so I keep them in my lib.
 
 ## Usage
 
@@ -81,7 +81,7 @@ svgcanvas.toDataURL('image/jpeg', function(err, jpeg) {
 
 - It will gc some invisible elements to save resources
 
-    This maybe aggressive and dark, however it's necessary if you have to use it for animation.
+    This maybe aggressive and dirty, however it's necessary if you have to use it for animation.
     When fillRect or clearRect called, if its args matches `0, 0, canvas.width, canvas.height`
 
 ## Unit Test
