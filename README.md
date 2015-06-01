@@ -3,9 +3,9 @@
 I create this repo because I need a mock &lt;canvas&gt; element for my [p5.js-svg](https://github.com/zenozeng/p5.js-svg).
 This lib is mainly based on gliffy's great work: [canvas2svg](https://github.com/gliffy/canvas2svg).
 
-You should use [gliffy's canvas2svg](https://github.com/gliffy/canvas2svg) if what you want is canvas context.
+You should use [gliffy's canvas2svg](https://github.com/gliffy/canvas2svg) if what you want is a clean and simple canvas context API.
 
-The major difference is that: this lib also adds some mock API for **element** (such as width, height, style, className, getBoundingClientRect, toDataURL).
+The major difference is that: this lib also adds some mock API for **element** (such as width, height, style, className, getBoundingClientRect, toDataURL). And this lib also adds some dark API for debug, such as context API call history.
 
 ## Usage
 
