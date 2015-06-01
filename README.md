@@ -5,7 +5,9 @@ This lib is mainly based on gliffy's great work: [canvas2svg](https://github.com
 
 You should use [gliffy's canvas2svg](https://github.com/gliffy/canvas2svg) if what you want is a clean and simple canvas context API.
 
-The major difference is that: this lib also adds some mock API for **element** (such as width, height, style, className, getBoundingClientRect, toDataURL). And this lib also adds some dark API for debug, such as context API call history.
+The major difference is that: this lib also adds some mock API for **element** (such as width, height, style, className, getBoundingClientRect, toDataURL).
+
+Note this lib also adds some dark API (such as context API call history for debug, gc some invisible elements). These API are some how very dark, so I did not pull request for these API. However, they are useful and necessary for my [p5.js-svg](https://github.com/zenozeng/p5.js-svg), so I keep them in my lib.
 
 ## Usage
 
@@ -21,39 +23,77 @@ svgcanvas.toDataURL('image/jpeg', function(err, jpeg) {
 
 ## Features
 
-- It will gc some invisible elements to save resources
+### Element
 
-    When fillRect or clearRect called, if its args matches `0, 0, canvas.width, canvas.height`
-
-- Simple value check for fillStyle, strokeStyle
-
-- svgcanvas.width
-
-- svgcanvas.height
-
-- svgcanvas.style
-
-- svgcanvas.className
-
-- svgcanvas.id
-
-- svgcanvas.getContext('2d')
-
-- svgcanvas.getBoundingClientRect()
-
+- canvas.width
+- canvas.height
+- canvas.style
+- canvas.className
+- canvas.id
+- canvas.getContext('2d')
+- canvas.getBoundingClientRect()
 - canvas.toDataURL()
 
     Note: this is implemented in async way (due to image.onload issue)
 
+### Context
+
+- ctx.save
+- ctx.restore
+- ctx.scale
+- ctx.rotate
+- ctx.translate
+- ctx.transform
+- ctx.beginPath
+- ctx.moveTo
+- ctx.closePath
+- ctx.lineTo
+- ctx.bezierCurveTo
+- ctx.quadraticCurveTo
+- ctx.arcTo (still working on it)
+- ctx.stroke
+- ctx.fill
+- ctx.rect
+- ctx.fillRect
+- ctx.strokeRect
+- ctx.clearRect (Buggy, see also: [canvas2svg#19](https://github.com/gliffy/canvas2svg/issues/19))
+- ctx.createLinearGradient
+- ctx.createRadialGradient
+- ctx.fillText
+- ctx.strokeText
+- ctx.measureText
+- ctx.arc
+- ctx.clip
+- ctx.drawImage
+- ctx.createPattern
 - ctx.imageSmoothingEnabled
 
-    Note: this is implemented using `properties["shape-rendering"] = "crispEdges"`
+    Note: this is implemented using `properties["shape-rendering"] = "crispEdges"`, and may get different behavior in SVG and Canvas.
+
+- Simple value check for fillStyle, strokeStyle
+
+### Other
+
+- ctx.__history
+
+    This array collect all (up to 1000) context call.
+    Will only be available if debug on. (`new SVGCanvas({debug: true})`)
+
+- It will gc some invisible elements to save resources
+
+    This maybe aggressive and dark, however it's necessary if you have to use it for animation.
+    When fillRect or clearRect called, if its args matches `0, 0, canvas.width, canvas.height`
 
 ## Unit Test
 
 See p5.js-svg's Unit Test:
 
 http://zenozeng.github.io/p5.js-svg/test/
+
+## Contribute
+
+You should always contribute to [canvas2svg](https://github.com/gliffy/canvas2svg) if it's context API issue.
+Together, we can make a better canvas2svg library.
 
 ## License
 
