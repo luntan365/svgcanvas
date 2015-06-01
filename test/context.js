@@ -1,3 +1,5 @@
 testRender("ctx.rect", function(ctx) {
-    ctx.rect(20, 20, 100, 100);
+    ctx.fillStyle = '#ccc';
+    ctx.rect(20, 20, 50, 50);
+    ctx.fill();
 });

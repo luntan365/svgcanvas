@@ -1,0 +1,14 @@
+body {
+    padding: 2em;
+}
+h2 {
+    font-weight: normal;
+}
+canvas, svg {
+    box-shadow: 0 0 3px #777;
+    margin-right: 1em;
+}
+.function {
+    font-size: 12px;
+    color: #555;
+}
