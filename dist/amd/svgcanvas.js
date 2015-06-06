@@ -1,3 +1,14 @@
+/*!!
+ *  svgcanvas v0.1.0
+ *  Provide <canvas>'s element API and context API using SVG
+ *
+ *  Copyright (C) 2015 Zeno Zeng
+ *  Licensed under the MIT license.
+ *
+ *  This program incorporates Gliffy Inc's canvas2svg,
+ *  which is licensed under the MIT license.
+ */
+
 define(function() {
     var C2S;
     /*!!
