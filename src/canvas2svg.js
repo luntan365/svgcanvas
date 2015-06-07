@@ -589,13 +589,11 @@
 
 
     /**
-     * Adds the arcTo command to the current path
+     * Adds the arcTo to the current path
      *
      * @see http://www.w3.org/TR/2015/WD-2dcontext-20150514/#dom-context-2d-arcto
      */
-    ctx.prototype.arcTo = function(x, y, r1, r2, radius) {
-        console.log('arcTo', x, y, r1, r2, radius);
-
+    ctx.prototype.arcTo = function(x1, y1, x2, y2, radius) {
         // TODO: The arcTo(x1, y1, x2, y2, radius) method must first ensure there is a subpath for (x1, y1).
 
         // Negative values for radius must cause the implementation to throw an IndexSizeError exception.
@@ -611,14 +609,59 @@
 
         // TODO: Otherwise, if the points (x0, y0), (x1, y1), and (x2, y2) all lie on a single straight line, then the method must add the point (x1, y1) to the subpath, and connect that point to the previous point (x0, y0) by a straight line.
 
-        // Otherwise, let The Arc be the shortest arc given by circumference of the circle that has radius radius, and that has one point tangent to the half-infinite line that crosses the point (x0, y0) and ends at the point (x1, y1), and that has a different point tangent to the half-infinite line that ends at the point (x1, y1), and crosses the point (x2, y2).
+        // Otherwise, let The Arc be the shortest arc given by circumference of the circle that has radius radius,
+        // and that has one point tangent to the half-infinite line that crosses the point (x0, y0) and ends at the point (x1, y1),
+        // and that has a different point tangent to the half-infinite line that ends at the point (x1, y1), and crosses the point (x2, y2).
         // The points at which this circle touches these two lines are called the start and end tangent points respectively.
 
-        // The method must connect the point (x0, y0) to the start tangent point by a straight line, adding the start tangent point to the subpath
+        var len_p1_p0 = Math.sqrt((x0 - x1) * (x0 - x1) + (y0 - y1) * (y0 - y1));
+        var unit_vec_p1_p0 = [
+            (x0 - x1) / len_p1_p0,
+            (y0 - y1) / len_p1_p0
+        ];
+        var len_p1_p2 = Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+        var unit_vec_p1_p2 = [
+            (x2 - x1) / len_p1_p2,
+            (y2 - y1) / len_p1_p2
+        ];
 
-        // then must connect the start tangent point to the end tangent point by The Arc, adding the end tangent point to the subpath.
+        // note that both vectors are unit vectors, so the length is 1
+        var cos = (unit_vec_p1_p0[0] * unit_vec_p1_p2[0] + unit_vec_p1_p0[1] * unit_vec_p1_p2[1]);
+        var theta = Math.acos(Math.abs(cos));
 
-        // this.__addPathCommand("A " + [x, y, r1, r2, angle].join(' '));
+        // Calculate origin
+        var unit_vec_p1_origin = [
+            (unit_vec_p1_p0[0] + unit_vec_p1_p2[0]) / 2,
+            (unit_vec_p1_p0[1] + unit_vec_p1_p2[1]) / 2
+        ];
+        var len_p1_origin = radius / Math.sin(theta / 2);
+        var x = x1 + len_p1_origin * unit_vec_p1_origin[0];
+        var y = y1 + len_p1_origin * unit_vec_p1_origin[1];
+
+        // Calculate start angle and end angle
+        // rotate 90deg clockwise (note that y axis points to its down)
+        var unit_vec_origin_start_tangent = [
+            -unit_vec_p1_p0[1],
+            unit_vec_p1_p0[0]
+        ];
+        // rotate 90deg counter clockwise (note that y axis points to its down)
+        var unit_vec_origin_end_tangent = [
+            unit_vec_p1_p2[1],
+            -unit_vec_p1_p2[0]
+        ];
+        var startAngle = -Math.acos(unit_vec_origin_start_tangent[0]);
+        var endAngle = Math.acos(unit_vec_origin_end_tangent[0]);
+        console.log([startAngle, endAngle].map(function(angle) {
+            return angle / Math.PI * 180;
+        }));
+
+        // Connect the point (x0, y0) to the start tangent point by a straight line
+        debugger;
+        this.lineTo(x + unit_vec_origin_start_tangent[0] * radius,
+                    y + unit_vec_origin_start_tangent[1] * radius);
+
+        // Connect the start tangent point to the end tangent point by arc
+        this.arc(x, y, radius, startAngle, endAngle);
     };
 
     /**
