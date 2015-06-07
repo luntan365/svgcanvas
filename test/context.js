@@ -55,5 +55,23 @@ describe('Context API', function() {
             ctx.lineWidth = 1;
             ctx.stroke();
         });
+
+        testRender('arcTo: must connect the point (x0, y0) to the start tangent point by a straight line', function(ctx) {
+            ctx.beginPath();
+            ctx.lineWidth = 3;
+            ctx.moveTo(0, 0);
+            ctx.arcTo(100, 100, 0, 100, 10);
+            ctx.strokeStyle = '#000';
+            ctx.stroke();
+        });
+
+        testRender('arcTo: arcTo after arc (test subpath)', function(ctx) {
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.arc(50, 50, 30, -Math.PI/2, Math.PI/2);
+            ctx.arcTo(100, 100, 0, 100, 10);
+            ctx.strokeStyle = '#000';
+            ctx.stroke();
+        });
     });
 });

@@ -668,7 +668,6 @@
         }));
 
         // Connect the point (x0, y0) to the start tangent point by a straight line
-        debugger;
         this.lineTo(x + unit_vec_origin_start_tangent[0] * radius,
                     y + unit_vec_origin_start_tangent[1] * radius);
 
