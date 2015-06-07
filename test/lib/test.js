@@ -60,6 +60,7 @@
                     // 计算八连通中的像素数以确认是否是由于渲染造成的1px渲染差异
                     // 注意这样的话，线宽应该要至少大于1
                     var imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                    var imgDataCopy = ctx.getImageData(0, 0, canvas.width, canvas.height);
                     var width = canvas.width;
                     var height = canvas.height;
                     var getPixelIndex = function(x, y) {
@@ -67,7 +68,7 @@
                     };
                     var getPixel = function(x, y) {
                         var alphaIndex = getPixelIndex(x, y);
-                        return imgData.data[alphaIndex];
+                        return imgDataCopy.data[alphaIndex];
                     };
                     var setPixel = function(x, y, value) {
                         imgData.data[getPixelIndex(x, y)] = value;

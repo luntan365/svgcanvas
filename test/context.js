@@ -62,18 +62,32 @@ describe('Context API', function() {
             ctx.arcTo(75, 50, 25, 10, 15);
             ctx.strokeStyle = 'black';
             ctx.stroke();
-            ctx.fillStyle = 'blue';
-            ctx.fillRect(75 - 2, 10 - 2, 4, 4);
-            ctx.fillStyle = 'red';
-            ctx.fillRect(75 - 2, 50 - 2, 4, 4);
-            ctx.fillRect(25 - 2, 10 - 2, 4, 4);
+        });
+
+        testRender('arcTo: test fill', function(ctx) {
+            ctx.strokeStyle = '#000';
+            ctx.fillStyle = 'gray';
+            ctx.lineWidth = 3;
             ctx.beginPath();
-            ctx.moveTo(75, 50);
-            ctx.lineTo(75, 10);
-            ctx.moveTo(75, 50);
-            ctx.lineTo(25, 10);
-            ctx.strokeStyle = 'gray';
-            ctx.lineWidth = 1;
+            ctx.moveTo(50, 20);
+            ctx.arcTo(85, 20, 85, 75, 15);
+            ctx.lineTo(70, 20);
+            ctx.arc(70, 35, 15, -1.5707963267948966, 0);
+            ctx.moveTo(70, 20);
+            ctx.arcTo(85, 75, 30, 75, 10);
+            ctx.lineTo(85, 65);
+            ctx.arc(75, 65, 10, 0, 1.5707963267948966);
+            ctx.moveTo(85, 65);
+            ctx.arcTo(30, 75, 30, 20, 5);
+            ctx.lineTo(35, 75);
+            ctx.arc(35, 70, 5, -1.5707963267948966, 3.141592653589793);
+            ctx.moveTo(35, 65);
+            ctx.arcTo(30, 20, 85, 20, 20);
+            ctx.lineTo(30, 40);
+            ctx.arc(50, 40, 20, -3.141592653589793, 1.5707963267948966);
+            ctx.moveTo(30, 40);
+            ctx.closePath();
+            ctx.fill();
             ctx.stroke();
         });
 
@@ -85,7 +99,7 @@ describe('Context API', function() {
             }, /The radius provided \(-1\) is negative/);
         });
 
-        testRender('The arcTo(x1, y1, x2, y2, radius) method must first ensure there is a subpath for (x1, y1).', function(ctx) {
+        testRender('arcTo: must first ensure there is a subpath for (x1, y1).', function(ctx) {
             // canvas's api just ignore it and do nothing
             ctx.beginPath();
             ctx.arcTo(100, 100, 0, 100, 15);
