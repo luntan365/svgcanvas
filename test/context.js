@@ -35,14 +35,21 @@ describe('Context API', function() {
     });
 
     describe('arc', function() {
-        // testRender('arc#1', function(ctx) {
-        //     ctx.lineWidth = 3;
-        //     ctx.strokeStyle = '#000';
-        //     ctx.beginPath();
-        //     ctx.moveTo(0, 0);
-        //     ctx.arc(0, 0, 100, 0, Math.PI / 2);
-        //     ctx.stroke();
-        // });
+        testRender('arc#1', function(ctx) {
+            ctx.lineWidth = 3;
+            ctx.strokeStyle = '#000';
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.arc(0, 0, 100, 0, Math.PI / 2);
+            ctx.stroke();
+        });
+        testRender('arc#2', function(ctx) {
+            ctx.lineWidth = 3;
+            ctx.strokeStyle = '#000';
+            ctx.beginPath();
+            ctx.arc(48, 30, 30, -2.68, 1.57);
+            ctx.stroke();
+        });
     });
 
     describe('arcTo', function() {
@@ -55,6 +62,7 @@ describe('Context API', function() {
             ctx.arcTo(100, 100, 0, 100, 100);
             ctx.stroke();
         });
+
         testRender('arcTo#2', function(ctx) {
             ctx.beginPath();
             ctx.lineWidth = 3;
@@ -64,30 +72,24 @@ describe('Context API', function() {
             ctx.stroke();
         });
 
+        testRender('arcTo#3', function(ctx) {
+            ctx.strokeStyle = '#000';
+            ctx.fillStyle = 'gray';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(50, 100);
+            ctx.arcTo(0, 0, 100, 0, 30);
+            ctx.stroke();
+        });
+
         testRender('arcTo: test fill', function(ctx) {
             ctx.strokeStyle = '#000';
             ctx.fillStyle = 'gray';
             ctx.lineWidth = 3;
             ctx.beginPath();
-            ctx.moveTo(50, 20);
-            ctx.arcTo(85, 20, 85, 75, 15);
-            ctx.lineTo(70, 20);
-            ctx.arc(70, 35, 15, -1.5707963267948966, 0);
-            ctx.moveTo(70, 20);
-            ctx.arcTo(85, 75, 30, 75, 10);
-            ctx.lineTo(85, 65);
-            ctx.arc(75, 65, 10, 0, 1.5707963267948966);
-            ctx.moveTo(85, 65);
-            ctx.arcTo(30, 75, 30, 20, 5);
-            ctx.lineTo(35, 75);
-            ctx.arc(35, 70, 5, -1.5707963267948966, 3.141592653589793);
             ctx.moveTo(35, 65);
             ctx.arcTo(30, 20, 85, 20, 20);
-            ctx.lineTo(30, 40);
-            ctx.arc(50, 40, 20, -3.141592653589793, 1.5707963267948966);
-            ctx.moveTo(30, 40);
             ctx.closePath();
-            ctx.fill();
             ctx.stroke();
         });
 

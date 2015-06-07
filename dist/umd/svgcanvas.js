@@ -1,5 +1,5 @@
 /*!!
- *  svgcanvas v0.1.0
+ *  svgcanvas v0.2.0
  *  Provide <canvas>'s element API and context API using SVG
  *
  *  Copyright (C) 2015 Zeno Zeng
@@ -688,6 +688,7 @@
 
         // Connect the start tangent point to the end tangent point by arc
         // and adding the end tangent point to the subpath.
+        console.log(x, y, radius, startAngle, endAngle);
         this.arc(x, y, radius, startAngle, endAngle);
     };
 

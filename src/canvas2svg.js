@@ -676,6 +676,7 @@
 
         // Connect the start tangent point to the end tangent point by arc
         // and adding the end tangent point to the subpath.
+        console.log(x, y, radius, startAngle, endAngle);
         this.arc(x, y, radius, startAngle, endAngle);
     };
 
