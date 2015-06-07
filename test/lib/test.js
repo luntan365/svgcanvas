@@ -49,20 +49,37 @@
             });
 
             var ctx = diffCanvas.getContext('2d');
-            ctx.globalCompositeOperation = 'xor';
             svgCanvas.toDataURL(function(err, svg) {
                 var img = new Image();
                 img.onload = function() {
+                    var width = canvas.width;
+                    var height = canvas.height;
+
+                    ctx.clearRect(0, 0, width, height);
                     ctx.drawImage(img, 0, 0);
+                    var imgData1 = ctx.getImageData(0, 0, width, height);
+
+                    ctx.clearRect(0, 0, width, height);
                     ctx.drawImage(canvas, 0, 0);
+                    var imgData2 = ctx.getImageData(0, 0, width, height);
+
+                    ctx.clearRect(0, 0, width, height);
+                    var diffImgData = ctx.getImageData(0, 0, width, height);
+                    for (var i = 0; i < imgData1.data.length; i += 4) {
+                        var indexes = [i, i+1, i+2, i+3];
+                        if(indexes.some(function(i) {
+                            return imgData1.data[i] != imgData2.data[i];
+                        })) {
+                            diffImgData.data[i+3] = 255; // set black
+                        }
+                    }
+                    ctx.putImageData(diffImgData, 0, 0);
 
                     // 在 diffCanvas2 中绘制 diffCanvas 除去 1px 之后的结果
                     // 计算八连通中的像素数以确认是否是由于渲染造成的1px渲染差异
                     // 注意这样的话，线宽应该要至少大于1
-                    var imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                    var imgData = diffImgData;
                     var imgDataCopy = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                    var width = canvas.width;
-                    var height = canvas.height;
                     var getPixelIndex = function(x, y) {
                         return (y * width + x) * 4 + 3;
                     };
