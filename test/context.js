@@ -77,6 +77,14 @@ describe('Context API', function() {
             ctx.stroke();
         });
 
+        testRender('arcTo: Negative values for radius must cause the implementation to throw an IndexSizeError exception', function(ctx) {
+            assert.throws(function() {
+                ctx.beginPath();
+                ctx.moveTo(0, 0);
+                ctx.arcTo(0, 0, 100, 100, -1);
+            }, /The radius provided \(-1\) is negative/);
+        });
+
         testRender('The arcTo(x1, y1, x2, y2, radius) method must first ensure there is a subpath for (x1, y1).', function(ctx) {
             // canvas's api just ignore it and do nothing
             ctx.beginPath();

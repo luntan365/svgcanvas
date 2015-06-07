@@ -625,21 +625,35 @@
 
         // Negative values for radius must cause the implementation to throw an IndexSizeError exception.
         if (radius < 0) {
-            throw new Error("IndexSizeError: arcTo's radius could not be nagative");
+            throw new Error("IndexSizeError: The radius provided (" + radius + ") is negative.");
         }
 
+        // If the point (x0, y0) is equal to the point (x1, y1),
+        // or if the point (x1, y1) is equal to the point (x2, y2),
+        // or if the radius radius is zero,
+        // then the method must add the point (x1, y1) to the subpath,
+        // and connect that point to the previous point (x0, y0) by a straight line.
+        if (((x0 === x1) && (y0 === y1))
+            || ((x1 === x2) && (y1 === y2))
+            || (radius === 0)) {
+            this.lineTo(x1, y1);
+            return;
+        }
 
-        // TODO: If the point (x0, y0) is equal to the point (x1, y1), or if the point (x1, y1) is equal to the point (x2, y2), or if the radius radius is zero, then the method must add the point (x1, y1) to the subpath, and connect that point to the previous point (x0, y0) by a straight line.
-
-        // TODO: Otherwise, if the points (x0, y0), (x1, y1), and (x2, y2) all lie on a single straight line, then the method must add the point (x1, y1) to the subpath, and connect that point to the previous point (x0, y0) by a straight line.
+        // Otherwise, if the points (x0, y0), (x1, y1), and (x2, y2) all lie on a single straight line,
+        // then the method must add the point (x1, y1) to the subpath,
+        // and connect that point to the previous point (x0, y0) by a straight line.
+        var unit_vec_p1_p0 = normalize([x0 - x1, y0 - y1]);
+        var unit_vec_p1_p2 = normalize([x2 - x1, y2 - y1]);
+        if (unit_vec_p1_p0[0] * unit_vec_p1_p2[1] === unit_vec_p1_p0[1] * unit_vec_p1_p2[0]) {
+            this.lineTo(x1, y1);
+            return;
+        }
 
         // Otherwise, let The Arc be the shortest arc given by circumference of the circle that has radius radius,
         // and that has one point tangent to the half-infinite line that crosses the point (x0, y0) and ends at the point (x1, y1),
         // and that has a different point tangent to the half-infinite line that ends at the point (x1, y1), and crosses the point (x2, y2).
         // The points at which this circle touches these two lines are called the start and end tangent points respectively.
-
-        var unit_vec_p1_p0 = normalize([x0 - x1, y0 - y1]);
-        var unit_vec_p1_p2 = normalize([x2 - x1, y2 - y1]);
 
         // note that both vectors are unit vectors, so the length is 1
         var cos = (unit_vec_p1_p0[0] * unit_vec_p1_p2[0] + unit_vec_p1_p0[1] * unit_vec_p1_p2[1]);
@@ -673,6 +687,7 @@
                     y + unit_vec_origin_start_tangent[1] * radius);
 
         // Connect the start tangent point to the end tangent point by arc
+        // and adding the end tangent point to the subpath.
         this.arc(x, y, radius, startAngle, endAngle);
     };
 
