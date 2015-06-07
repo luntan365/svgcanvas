@@ -601,6 +601,14 @@
 
 
     /**
+     * Return a new normalized vector of given vector
+     */
+    var normalize = function(vector) {
+        var len = Math.sqrt(vector[0] * vector[0] + vector[1] * vector[1]);
+        return [vector[0] / len, vector[1] / len];
+    };
+
+    /**
      * Adds the arcTo to the current path
      *
      * @see http://www.w3.org/TR/2015/WD-2dcontext-20150514/#dom-context-2d-arcto
@@ -626,27 +634,24 @@
         // and that has a different point tangent to the half-infinite line that ends at the point (x1, y1), and crosses the point (x2, y2).
         // The points at which this circle touches these two lines are called the start and end tangent points respectively.
 
-        var len_p1_p0 = Math.sqrt((x0 - x1) * (x0 - x1) + (y0 - y1) * (y0 - y1));
-        var unit_vec_p1_p0 = [
-            (x0 - x1) / len_p1_p0,
-            (y0 - y1) / len_p1_p0
-        ];
-        var len_p1_p2 = Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
-        var unit_vec_p1_p2 = [
-            (x2 - x1) / len_p1_p2,
-            (y2 - y1) / len_p1_p2
-        ];
+        var unit_vec_p1_p0 = normalize([x0 - x1, y0 - y1]);
+        var unit_vec_p1_p2 = normalize([x2 - x1, y2 - y1]);
 
         // note that both vectors are unit vectors, so the length is 1
         var cos = (unit_vec_p1_p0[0] * unit_vec_p1_p2[0] + unit_vec_p1_p0[1] * unit_vec_p1_p2[1]);
         var theta = Math.acos(Math.abs(cos));
 
+        console.log(theta / Math.PI * 180);
+
         // Calculate origin
-        var unit_vec_p1_origin = [
-            (unit_vec_p1_p0[0] + unit_vec_p1_p2[0]) / 2,
-            (unit_vec_p1_p0[1] + unit_vec_p1_p2[1]) / 2
-        ];
+        var unit_vec_p1_origin = normalize([
+            unit_vec_p1_p0[0] + unit_vec_p1_p2[0],
+            unit_vec_p1_p0[1] + unit_vec_p1_p2[1]
+        ]);
         var len_p1_origin = radius / Math.sin(theta / 2);
+        console.log('p1', x1, y1);
+        console.log('unit_vec_p1_origin', unit_vec_p1_origin);
+        console.log('len_p1_origin', len_p1_origin);
         var x = x1 + len_p1_origin * unit_vec_p1_origin[0];
         var y = y1 + len_p1_origin * unit_vec_p1_origin[1];
 
@@ -663,15 +668,22 @@
         ];
         var startAngle = -Math.acos(unit_vec_origin_start_tangent[0]);
         var endAngle = Math.acos(unit_vec_origin_end_tangent[0]);
-        console.log([startAngle, endAngle].map(function(angle) {
-            return angle / Math.PI * 180;
-        }));
 
         // Connect the point (x0, y0) to the start tangent point by a straight line
+        console.log('origin', x, y);
+        console.log('vec_origin_start_tangent',
+                    unit_vec_origin_start_tangent[0] * radius,
+                    unit_vec_origin_start_tangent[1] * radius
+                   );
+        console.log('start_tangent',
+                    x + unit_vec_origin_start_tangent[0] * radius,
+                    y + unit_vec_origin_start_tangent[1] * radius);
         this.lineTo(x + unit_vec_origin_start_tangent[0] * radius,
                     y + unit_vec_origin_start_tangent[1] * radius);
 
         // Connect the start tangent point to the end tangent point by arc
+        console.log(x, y, radius, startAngle, endAngle);
+        console.log('done');
         this.arc(x, y, radius, startAngle, endAngle);
     };
 
