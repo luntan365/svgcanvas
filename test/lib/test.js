@@ -17,14 +17,22 @@
         title.innerHTML = describe;
 
         var canvas = document.createElement('canvas');
+        canvas.title = "Canvas";
+        var svgCanvasContainer = document.createElement('div');
+        svgCanvasContainer.className = 'svg';
         var svgCanvas = new SVGCanvas();
+        svgCanvasContainer.appendChild(svgCanvas.svg);
+        svgCanvasContainer.title = "SVG";
         var diffCanvas = document.createElement('canvas');
+        diffCanvas.title = "XOR";
+        var diffCanvas2 = document.createElement('canvas');
+        diffCanvas2.title = "XOR (with thin line removed (using 8-connected neighborhood < 5))";
 
         var fn = document.createElement('pre');
         fn.className = 'function';
         fn.innerHTML = render.toString().replace(/function(.*).*\{/g, '').replace(/}/g, '').replace(/^\s*|(\n)\s*/g, '$1');
 
-        [title, fn, svgCanvas.svg, canvas, diffCanvas].forEach(function(elt) {
+        [title, fn, svgCanvasContainer, canvas, diffCanvas, diffCanvas2].forEach(function(elt) {
             document.body.appendChild(elt);
         });
 
@@ -35,8 +43,10 @@
                 render(canvas.getContext('2d'), canvas);
             });
 
-            diffCanvas.width = 100;
-            diffCanvas.height = 100;
+            [diffCanvas, diffCanvas2].forEach(function(canvas) {
+                canvas.width = 100;
+                canvas.height = 100;
+            });
 
             var ctx = diffCanvas.getContext('2d');
             ctx.globalCompositeOperation = 'xor';
@@ -45,8 +55,54 @@
                 img.onload = function() {
                     ctx.drawImage(img, 0, 0);
                     ctx.drawImage(canvas, 0, 0);
+
+                    // 在 diffCanvas2 中绘制 diffCanvas 除去 1px 之后的结果
+                    // 计算八连通中的像素数以确认是否是由于渲染造成的1px渲染差异
+                    // 注意这样的话，线宽应该要至少大于1
+                    var imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                    var width = canvas.width;
+                    var height = canvas.height;
+                    var getPixelIndex = function(x, y) {
+                        return (y * width + x) * 4 + 3;
+                    };
+                    console.log(imgData);
+                    var getPixel = function(x, y) {
+                        var alphaIndex = getPixelIndex(x, y);
+                        return imgData.data[alphaIndex];
+                    };
+                    var setPixel = function(x, y, value) {
+                        imgData.data[getPixelIndex(x, y)] = value;
+                    };
+                    for (var x = 1; x < width - 1; x++) {
+                        for (var y = 1; y < height - 1; y++) {
+                            if (getPixel(x, y) == 0) {
+                                continue; // ignore transparents
+                            }
+                            // 检查八连通
+                            var links = [
+                                {x: x - 1, y: y - 1},
+                                {x: x, y: y - 1},
+                                {x: x + 1, y: y - 1},
+                                {x: x - 1, y: y},
+                                {x: x + 1, y: y},
+                                {x: x - 1, y: y + 1},
+                                {x: x, y: y + 1},
+                                {x: x + 1, y: y + 1}
+                            ].map(function(p) {
+                                return getPixel(p.x, p.y);
+                            }).filter(function(val) {
+                                return val > 0; // not transparent?
+                            }).length;
+
+                            if (links < 5) { // 是条单线
+                                setPixel(x, y, 0); // make it transparent
+                            }
+                        }
+                    }
+                    diffCanvas2.getContext('2d').putImageData(imgData, 0, 0);
+
                     var pixels = countNonTransparentPixels(canvas);
-                    var xor = countNonTransparentPixels(diffCanvas);
+                    var xor = countNonTransparentPixels(diffCanvas2);
                     var rate = xor / pixels;
                     if (rate > 0.1) {
                         var err = new Error("xorRate > 0.1, " + JSON.stringify({xor: xor, pixels: pixels, rate: rate}));

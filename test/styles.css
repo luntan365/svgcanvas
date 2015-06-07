@@ -5,6 +5,9 @@ body {
 h2, h3 {
     font-weight: normal;
 }
+div.svg {
+    display: inline-block;
+}
 canvas, svg {
     box-shadow: 0 0 3px #777;
     margin-right: 1em;
