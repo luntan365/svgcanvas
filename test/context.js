@@ -1,6 +1,18 @@
 var assert = chai.assert;
 
 describe('Context API', function() {
+
+    describe('fill', function() {
+        testRender('fill and lineWidth', function(ctx) {
+            ctx.fillStyle = 'gray';
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = 20;
+            ctx.rect(20, 20, 50, 50);
+            ctx.stroke();
+            ctx.fill();
+        });
+    });
+
     describe('rect', function() {
         testRender('rect', function(ctx) {
             ctx.fillStyle = '#ccc';
@@ -41,13 +53,6 @@ describe('Context API', function() {
             ctx.beginPath();
             ctx.moveTo(0, 0);
             ctx.arc(0, 0, 100, 0, Math.PI / 2);
-            ctx.stroke();
-        });
-        testRender('arc#2', function(ctx) {
-            ctx.lineWidth = 3;
-            ctx.strokeStyle = '#000';
-            ctx.beginPath();
-            ctx.arc(48, 30, 30, -2.68, 1.57);
             ctx.stroke();
         });
     });
@@ -91,6 +96,7 @@ describe('Context API', function() {
             ctx.arcTo(30, 20, 85, 20, 20);
             ctx.closePath();
             ctx.stroke();
+            ctx.fill();
         });
 
         testRender('arcTo: Negative values for radius must cause the implementation to throw an IndexSizeError exception', function(ctx) {

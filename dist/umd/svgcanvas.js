@@ -679,8 +679,18 @@
             unit_vec_p1_p2[1],
             -unit_vec_p1_p2[0]
         ];
-        var startAngle = -Math.acos(unit_vec_origin_start_tangent[0]);
-        var endAngle = Math.acos(unit_vec_origin_end_tangent[0]);
+        var getAngle = function(vector) {
+            // get angle (clockwise) between vector and (1, 0)
+            var x = vector[0];
+            var y = vector[1];
+            if (y >= 0) {
+                return Math.acos(x);
+            } else {
+                return Math.PI*2-Math.acos(x);
+            }
+        };
+        var startAngle = getAngle(unit_vec_origin_start_tangent);
+        var endAngle = getAngle(unit_vec_origin_end_tangent);
 
         // Connect the point (x0, y0) to the start tangent point by a straight line
         this.lineTo(x + unit_vec_origin_start_tangent[0] * radius,
