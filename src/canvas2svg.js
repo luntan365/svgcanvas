@@ -602,16 +602,20 @@
      * @see http://www.w3.org/TR/2015/WD-2dcontext-20150514/#dom-context-2d-arcto
      */
     ctx.prototype.arcTo = function(x1, y1, x2, y2, radius) {
-        // TODO: The arcTo(x1, y1, x2, y2, radius) method must first ensure there is a subpath for (x1, y1).
+        // Let the point (x0, y0) be the last point in the subpath.
+        var x0 = this.__currentPosition && this.__currentPosition.x;
+        var y0 = this.__currentPosition && this.__currentPosition.y;
+
+        // First ensure there is a subpath for (x1, y1).
+        if (typeof x0 == "undefined" || typeof y0 == "undefined") {
+            return;
+        }
 
         // Negative values for radius must cause the implementation to throw an IndexSizeError exception.
         if (radius < 0) {
             throw new Error("IndexSizeError: arcTo's radius could not be nagative");
         }
 
-        // Let the point (x0, y0) be the last point in the subpath.
-        var x0 = this.__currentPosition && this.__currentPosition.x;
-        var y0 = this.__currentPosition && this.__currentPosition.y;
 
         // TODO: If the point (x0, y0) is equal to the point (x1, y1), or if the point (x1, y1) is equal to the point (x2, y2), or if the radius radius is zero, then the method must add the point (x1, y1) to the subpath, and connect that point to the previous point (x0, y0) by a straight line.
 

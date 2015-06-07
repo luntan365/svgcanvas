@@ -1,3 +1,5 @@
+var assert = chai.assert;
+
 describe('Context API', function() {
     describe('rect', function() {
         testRender('rect', function(ctx) {
@@ -72,6 +74,15 @@ describe('Context API', function() {
             ctx.lineTo(25, 10);
             ctx.strokeStyle = 'gray';
             ctx.lineWidth = 1;
+            ctx.stroke();
+        });
+
+        testRender('The arcTo(x1, y1, x2, y2, radius) method must first ensure there is a subpath for (x1, y1).', function(ctx) {
+            // canvas's api just ignore it and do nothing
+            ctx.beginPath();
+            ctx.arcTo(100, 100, 0, 100, 15);
+            ctx.lineWidth = 3;
+            ctx.strokeStyle = 'black';
             ctx.stroke();
         });
 

@@ -65,7 +65,6 @@
                     var getPixelIndex = function(x, y) {
                         return (y * width + x) * 4 + 3;
                     };
-                    console.log(imgData);
                     var getPixel = function(x, y) {
                         var alphaIndex = getPixelIndex(x, y);
                         return imgData.data[alphaIndex];
