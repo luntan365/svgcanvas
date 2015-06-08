@@ -13,6 +13,15 @@ describe('Context API', function() {
         });
     });
 
+    describe('stroke', function() {
+        testRender('stroke and lineWidth', function(ctx) {
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = 20;
+            ctx.rect(20, 20, 50, 50);
+            ctx.stroke();
+        });
+    });
+
     describe('rect', function() {
         testRender('rect', function(ctx) {
             ctx.fillStyle = '#ccc';

@@ -549,6 +549,9 @@
         // creates a new subpath with the given point
         this.__currentPosition = {x: x, y: y};
         this.__addPathCommand(format("M {x} {y}", {x:x, y:y}));
+
+        // fixes https://github.com/zenozeng/p5.js-svg/issues/62
+        this.lineTo(x, y);
     };
 
     /**

@@ -509,6 +509,8 @@ define(function() {
             // creates a new subpath with the given point
             this.__currentPosition = {x: x, y: y};
             this.__addPathCommand(format("M {x} {y}", {x:x, y:y}));
+            // fixes https://github.com/zenozeng/p5.js-svg/issues/62
+            this.lineTo(x, y);
         };
         /**
          * Closes the current path
@@ -616,10 +618,10 @@ define(function() {
                 // get angle (clockwise) between vector and (1, 0)
                 var x = vector[0];
                 var y = vector[1];
-                if (y >= 0) {
+                if (y >= 0) { // note that y axis points to its down
                     return Math.acos(x);
                 } else {
-                    return Math.PI*2-Math.acos(x);
+                    return -Math.acos(x);
                 }
             };
             var startAngle = getAngle(unit_vec_origin_start_tangent);
