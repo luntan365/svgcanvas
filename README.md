@@ -36,6 +36,10 @@ svgcanvas.toDataURL('image/jpeg', function(err, jpeg) {
 
     Note: this is implemented in async way (due to image.onload issue)
 
+- canvas.toObjectURL();
+
+    Note: you should always use URL.revokeObjectURL after your work done
+
 ### Context
 
 - ctx.save
