@@ -689,7 +689,6 @@
 
         // Connect the start tangent point to the end tangent point by arc
         // and adding the end tangent point to the subpath.
-        console.log(x, y, radius, startAngle, endAngle);
         this.arc(x, y, radius, startAngle, endAngle);
     };
 
@@ -949,7 +948,7 @@
             largeArcFlag = diff > Math.PI ? 1 : 0;
         }
 
-        this.moveTo(startX, startY);
+        this.lineTo(startX, startY);
         this.__addPathCommand(format("A {rx} {ry} {xAxisRotation} {largeArcFlag} {sweepFlag} {endX} {endY}",
             {rx:radius, ry:radius, xAxisRotation:0, largeArcFlag:largeArcFlag, sweepFlag:sweepFlag, endX:endX, endY:endY}));
 

@@ -22,6 +22,21 @@ describe('Context API', function() {
         });
     });
 
+    describe('closePath', function() {
+        testRender('closePath and moveTo', function(ctx) {
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = 10;
+            ctx.beginPath();
+            ctx.moveTo(0, 10);
+            ctx.lineTo(100, 10);
+            ctx.moveTo(0, 50);
+            ctx.lineTo(100, 50);
+            ctx.lineTo(100, 100);
+            ctx.closePath();
+            ctx.stroke();
+        });
+    });
+
     describe('rect', function() {
         testRender('rect', function(ctx) {
             ctx.fillStyle = '#ccc';

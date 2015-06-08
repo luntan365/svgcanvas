@@ -1,5 +1,5 @@
 /*!!
- *  svgcanvas v0.2.0
+ *  svgcanvas v0.3.0
  *  Provide <canvas>'s element API and context API using SVG
  *
  *  Copyright (C) 2015 Zeno Zeng
@@ -631,7 +631,6 @@ define(function() {
                         y + unit_vec_origin_start_tangent[1] * radius);
             // Connect the start tangent point to the end tangent point by arc
             // and adding the end tangent point to the subpath.
-            console.log(x, y, radius, startAngle, endAngle);
             this.arc(x, y, radius, startAngle, endAngle);
         };
         /**
@@ -866,7 +865,7 @@ define(function() {
             } else {
                 largeArcFlag = diff > Math.PI ? 1 : 0;
             }
-            this.moveTo(startX, startY);
+            this.lineTo(startX, startY);
             this.__addPathCommand(format("A {rx} {ry} {xAxisRotation} {largeArcFlag} {sweepFlag} {endX} {endY}",
                 {rx:radius, ry:radius, xAxisRotation:0, largeArcFlag:largeArcFlag, sweepFlag:sweepFlag, endX:endX, endY:endY}));
             this.__currentPosition = {x: endX, y: endY};
