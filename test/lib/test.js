@@ -49,9 +49,11 @@
             });
 
             var ctx = diffCanvas.getContext('2d');
-            svgCanvas.toDataURL(function(err, svg) {
+            // svgCanvas.toDataURL(function(err, svg) {
+            (function(svg) {
                 var img = new Image();
-                img.onload = function() {
+                var onload = function() {
+                    console.log('hi', done);
                     var width = canvas.width;
                     var height = canvas.height;
 
@@ -128,8 +130,12 @@
                         done();
                     }
                 };
+                img.onload = function() {
+                    onload();
+                    URL.revokeObjectURL(svg);
+                };
                 img.src = svg;
-            });
+            })(svgCanvas.toObjectURL());
         });
     };
 

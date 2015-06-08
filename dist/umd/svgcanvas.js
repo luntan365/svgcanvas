@@ -1363,6 +1363,13 @@ SVGCanvas.prototype.getContext = function(type) {
     return this.ctx;
 };
 
+// you should always use URL.revokeObjectURL after your work done
+SVGCanvas.prototype.toObjectURL = function() {
+    var data = this.getContext('2d').getSerializedSvg();
+    var svg = new Blob([data], {type: 'image/svg+xml;charset=utf-8'});
+    return URL.createObjectURL(svg);
+};
+
 SVGCanvas.prototype.toDataURL = function(type, options, callback) {
     if (typeof type === "function") {
         callback = type;
