@@ -1,5 +1,7 @@
 # svgcanvas
 
+[![build](https://travis-ci.org/zenozeng/svgcanvas.svg)](https://travis-ci.org/zenozeng/svgcanvas)
+
 I create this repo because I need a mock &lt;canvas&gt; element for my [p5.js-svg](https://github.com/zenozeng/p5.js-svg).
 This lib is mainly based on gliffy's great work: [canvas2svg](https://github.com/gliffy/canvas2svg).
 
