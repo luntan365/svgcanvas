@@ -139,17 +139,22 @@ describe('Context API', function() {
                 ctx.beginPath();
                 ctx.moveTo(0, 0);
                 ctx.arcTo(0, 0, 100, 100, -1);
-            }, /The radius provided \(-1\) is negative/);
+            });
         });
 
-        testRender('arcTo: must first ensure there is a subpath for (x1, y1).', function(ctx) {
-            // canvas's api just ignore it and do nothing
-            ctx.beginPath();
-            ctx.arcTo(100, 100, 0, 100, 15);
-            ctx.lineWidth = 3;
-            ctx.strokeStyle = 'black';
-            ctx.stroke();
-        });
+        // chrome and firefox have different behavior
+        // this is same as chrome
+        var isChrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
+        if (isChrome) {
+            testRender('arcTo: must first ensure there is a subpath for (x1, y1).', function(ctx) {
+                // canvas's api just ignore it and do nothing
+                ctx.beginPath();
+                ctx.arcTo(100, 100, 0, 100, 15);
+                ctx.lineWidth = 3;
+                ctx.strokeStyle = 'black';
+                ctx.stroke();
+            });
+        }
 
         testRender('arcTo: If the point (x0, y0) is equal to the point (x1, y1), then the method must add the point (x1, y1) to the subpath, and connect that point to the previous point (x0, y0) by a straight line.', function(ctx) {
             ctx.beginPath();
@@ -201,14 +206,14 @@ describe('Context API', function() {
             ctx.stroke();
         });
 
-        // testRender('arcTo: arcTo after arc (test subpath)', function(ctx) {
-        //     ctx.beginPath();
-        //     ctx.lineWidth = 3;
-        //     ctx.moveTo(0, 0);
-        //     ctx.arc(50, 50, 30, -Math.PI/2, Math.PI/2);
-        //     ctx.arcTo(100, 100, 0, 100, 10);
-        //     ctx.strokeStyle = '#000';
-        //     ctx.stroke();
-        // });
+        testRender('arcTo: arcTo after arc (test subpath)', function(ctx) {
+            ctx.beginPath();
+            ctx.lineWidth = 3;
+            ctx.moveTo(0, 0);
+            ctx.arc(50, 50, 30, -Math.PI/2, Math.PI/2);
+            ctx.arcTo(100, 100, 0, 100, 10);
+            ctx.strokeStyle = '#000';
+            ctx.stroke();
+        });
     });
 });

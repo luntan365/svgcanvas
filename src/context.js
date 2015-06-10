@@ -79,8 +79,6 @@ var Context = function(width, height, options) {
                     _this.__history.shift();
                 }
 
-                console.debug('svgcanvas: ', call);
-
                 return fn.apply(_this, arguments);
             };
         });

@@ -53,7 +53,6 @@
             (function(svg) {
                 var img = new Image();
                 var onload = function() {
-                    console.log('hi', done);
                     var width = canvas.width;
                     var height = canvas.height;
 

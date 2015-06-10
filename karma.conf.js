@@ -8,6 +8,7 @@ module.exports = function(config) {
         files: [
             'dist/umd/svgcanvas.js',
             'test/lib/mocha.js',
+            'test/lib/chai.js',
             'test/lib/test.js',
             'test/context.js',
             'test/element.js'

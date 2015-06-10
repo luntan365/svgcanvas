@@ -1,5 +1,5 @@
 /*!!
- *  svgcanvas v0.3.0
+ *  svgcanvas v0.4.0
  *  Provide <canvas>'s element API and context API using SVG
  *
  *  Copyright (C) 2015 Zeno Zeng
@@ -636,7 +636,7 @@ define(function() {
          */
         ctx.prototype.stroke = function(){
             if(this.__currentElement.nodeName === "path") {
-                this.__currentElement.setAttribute("paint-order", 'fill');
+                this.__currentElement.setAttribute("paint-order", "fill stroke markers");
             }
             this.__applyCurrentDefaultPath();
             this.__applyStyleToCurrentElement("stroke");
@@ -646,7 +646,7 @@ define(function() {
          */
         ctx.prototype.fill = function(){
             if(this.__currentElement.nodeName === "path") {
-                this.__currentElement.setAttribute("paint-order", 'stroke');
+                this.__currentElement.setAttribute("paint-order", "stroke fill markers");
             }
             this.__applyCurrentDefaultPath();
             this.__applyStyleToCurrentElement("fill");
@@ -1075,7 +1075,6 @@ define(function() {
                     if (_this.__history.length > 100) {
                         _this.__history.shift();
                     }
-                    console.debug('svgcanvas: ', call);
                     return fn.apply(_this, arguments);
                 };
             });
