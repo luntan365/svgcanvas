@@ -561,9 +561,6 @@
         // creates a new subpath with the given point
         this.__currentPosition = {x: x, y: y};
         this.__addPathCommand(format("M {x} {y}", {x:x, y:y}));
-
-        // fixes https://github.com/zenozeng/p5.js-svg/issues/62
-        this.lineTo(x, y);
     };
 
     /**
@@ -708,6 +705,9 @@
      * Sets the stroke property on the current element
      */
     ctx.prototype.stroke = function(){
+        if(this.__currentElement.nodeName === "path") {
+            this.__currentElement.setAttribute("paint-order", 'fill');
+        }
         this.__applyCurrentDefaultPath();
         this.__applyStyleToCurrentElement("stroke");
     };
@@ -716,6 +716,9 @@
      * Sets fill properties on the current element
      */
     ctx.prototype.fill = function(){
+        if(this.__currentElement.nodeName === "path") {
+            this.__currentElement.setAttribute("paint-order", 'stroke');
+        }
         this.__applyCurrentDefaultPath();
         this.__applyStyleToCurrentElement("fill");
     };
@@ -1182,7 +1185,6 @@ var Context = function(width, height, options) {
                 set: function(val) {
                     var call = prop.replace(/__/g, '') + " = " + val;
                     _this.__history.push(call);
-                    console.debug('svgcanvas: ', call);
                     _this[key] = val;
                 }
             });

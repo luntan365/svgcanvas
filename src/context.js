@@ -64,7 +64,6 @@ var Context = function(width, height, options) {
                 set: function(val) {
                     var call = prop.replace(/__/g, '') + " = " + val;
                     _this.__history.push(call);
-                    console.debug('svgcanvas: ', call);
                     _this[key] = val;
                 }
             });

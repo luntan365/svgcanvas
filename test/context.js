@@ -3,13 +3,24 @@ var assert = chai.assert;
 describe('Context API', function() {
 
     describe('fill', function() {
-        testRender('fill and lineWidth', function(ctx) {
+        testRender('fill after stroke', function(ctx) {
             ctx.fillStyle = 'gray';
             ctx.strokeStyle = '#000';
             ctx.lineWidth = 20;
             ctx.rect(20, 20, 50, 50);
             ctx.stroke();
             ctx.fill();
+        });
+    });
+
+    describe('fill', function() {
+        testRender('fill before stroke', function(ctx) {
+            ctx.fillStyle = 'gray';
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = 20;
+            ctx.rect(20, 20, 50, 50);
+            ctx.fill();
+            ctx.stroke();
         });
     });
 
