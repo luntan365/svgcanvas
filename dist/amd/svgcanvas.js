@@ -1221,32 +1221,41 @@ define(function() {
         var svg = new Blob([data], {type: 'image/svg+xml;charset=utf-8'});
         return URL.createObjectURL(svg);
     };
-    SVGCanvas.prototype.toDataURL = function(type, options, callback) {
-        if (typeof type === "function") {
-            callback = type;
-            type = null;
+    SVGCanvas.prototype.toDataURL = function(type, options) {
+        var SVGDataURL = "data:image/svg+xml;charset=utf-8," + this.getContext('2d').getSerializedSvg();
+        if (type === "image/svg+xml" || !type) {
+            return SVGDataURL;
         }
-        if (typeof options === "function") {
-            callback = options;
-            options = {};
-        }
-        var svgCanvas = this;
-        var serializedSVG = svgCanvas.getContext('2d').getSerializedSvg();
-        var dataURL = "data:image/svg+xml;charset=utf-8," + serializedSVG;
         if (type === "image/jpeg" || type === "image/png") {
             var canvas = document.createElement('canvas');
-            canvas.width = svgCanvas.width;
-            canvas.height = svgCanvas.height;
+            canvas.width = this.width;
+            canvas.height = this.height;
             var ctx = canvas.getContext('2d');
             var img = new Image();
-            img.onload = function() {
+            img.src = SVGDataURL;
+            if (false && img.complete && img.width > 0 && img.height > 0) {
+                // for chrome, it's ready immediately
                 ctx.drawImage(img, 0, 0);
-                callback(null, canvas.toDataURL(type, options));
-            };
-            img.src = dataURL;
-        } else {
-            callback(null, dataURL);
+            } else {
+                // for firefox, it's not possible to provide sync api in current thread
+                // Let's do it in web worker
+                var html = [
+                    "<script>",
+                    "var img = new Image();",
+                    "alert('hello');",
+                    "console.log(123);",
+                    "console.log('" + SVGDataURL + "');",
+                    "img.onload = function() { console.log(img) }; ",
+                    "</script>"
+                ].join('');
+                var iframe = document.createElement('iframe');
+                iframe.src = "data:text/html;charset=utf-8," + encodeURIComponent(html);
+                console.log(iframe.src);
+                document.body.appendChild(iframe);
+            }
+            return canvas.toDataURL(type, options);
         }
+        throw new Error('Unknown type for SVGCanvas.prototype.toDataURL, please use image/jpeg | image/png | image/svg+xml.');
     };
     return SVGCanvas;
 });
