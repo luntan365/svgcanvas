@@ -36,7 +36,8 @@ svgcanvas.toDataURL('image/jpeg', function(err, jpeg) {
 - canvas.getBoundingClientRect()
 - canvas.toDataURL()
 
-    Note: this is implemented in async way (due to image.onload issue)
+    This method support image/jpeg | image/png | image/svg+xml.
+    Note that sync api for jpeg and png is only available in chrome due to image load issue.
 
 - canvas.toObjectURL();
 
@@ -56,7 +57,7 @@ svgcanvas.toDataURL('image/jpeg', function(err, jpeg) {
 - ctx.lineTo
 - ctx.bezierCurveTo
 - ctx.quadraticCurveTo
-- ctx.arcTo (still working on it)
+- ctx.arcTo
 - ctx.stroke
 - ctx.fill
 - ctx.rect

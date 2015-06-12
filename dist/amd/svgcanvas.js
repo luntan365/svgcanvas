@@ -1233,27 +1233,15 @@ define(function() {
             var ctx = canvas.getContext('2d');
             var img = new Image();
             img.src = SVGDataURL;
-            if (false && img.complete && img.width > 0 && img.height > 0) {
+            if (img.complete && img.width > 0 && img.height > 0) {
                 // for chrome, it's ready immediately
                 ctx.drawImage(img, 0, 0);
+                return canvas.toDataURL(type, options);
             } else {
                 // for firefox, it's not possible to provide sync api in current thread
-                // Let's do it in web worker
-                var html = [
-                    "<script>",
-                    "var img = new Image();",
-                    "alert('hello');",
-                    "console.log(123);",
-                    "console.log('" + SVGDataURL + "');",
-                    "img.onload = function() { console.log(img) }; ",
-                    "</script>"
-                ].join('');
-                var iframe = document.createElement('iframe');
-                iframe.src = "data:text/html;charset=utf-8," + encodeURIComponent(html);
-                console.log(iframe.src);
-                document.body.appendChild(iframe);
+                // and web worker doesn't provide canvas API, so
+                throw new Error('svgcanvas.toDataURL() for jpeg/png is only available in Chrome.');
             }
-            return canvas.toDataURL(type, options);
         }
         throw new Error('Unknown type for SVGCanvas.prototype.toDataURL, please use image/jpeg | image/png | image/svg+xml.');
     };

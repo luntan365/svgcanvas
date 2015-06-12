@@ -1,5 +1,7 @@
 var assert = chai.assert;
 
+var isChrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
+
 describe('Element API', function() {
 
     describe('toDataURL', function() {
@@ -18,17 +20,19 @@ describe('Element API', function() {
                             -1);
         });
 
-        it('should export png', function() {
-            var dataurl = svgCanvas.toDataURL('image/png');
-            assert.notEqual(dataurl.indexOf('data:image/png'), -1);
-            console.log(dataurl);
-        });
+        if (isChrome) {
+            it('should export png in chrome', function() {
+                var dataurl = svgCanvas.toDataURL('image/png');
+                assert.notEqual(dataurl.indexOf('data:image/png'), -1);
+            });
+        }
 
-        // it('should export jpeg', function() {
-        //     var dataurl = svgCanvas.toDataURL('image/jpeg');
-        //     assert.notEqual(dataurl.indexOf('data:image/jpeg'), -1);
-        //     console.log(dataurl);
-        // });
+        if (isChrome) {
+            it('should export jpeg in chrome', function() {
+                var dataurl = svgCanvas.toDataURL('image/jpeg');
+                assert.notEqual(dataurl.indexOf('data:image/jpeg'), -1);
+            });
+        }
 
         it('should throw error when exporting unknown type', function() {
             assert.throws(function() {
