@@ -16,7 +16,7 @@ describe('Element API', function() {
 
         it('should export svg', function() {
             var dataurl = svgCanvas.toDataURL();
-            assert.notEqual(dataurl.indexOf('M 10 10 L 110 10 L 110 110 L 10 110 L 10 10'),
+            assert.notEqual(dataurl.indexOf(encodeURI('M 10 10 L 110 10 L 110 110 L 10 110 L 10 10')),
                             -1);
         });
 
