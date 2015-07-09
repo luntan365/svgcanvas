@@ -87,6 +87,14 @@ var Context = function(width, height, options) {
 
 Context.prototype = Object.create(C2S.prototype);
 
+Context.prototype.scale = function(x, y) {
+    if (x === undefined || y === undefined) {
+        return;
+    } else {
+        C2S.prototype.scale.apply(this, arguments);
+    }
+};
+
 Context.prototype.__createElement = function(elementName, properties, resetFill) {
     if (!this.__imageSmoothingEnabled) {
         // only shape elements can use the shape-rendering attribute
