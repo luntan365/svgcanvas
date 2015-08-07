@@ -11,12 +11,16 @@ function SVGCanvas(options) {
     var svg = this.svg;
     var _this = this;
 
+    var wrapper = document.createElement('div');
+    wrapper.style.display = 'inline-block';
+    this.wrapper = wrapper;
+
     Object.defineProperty(this, 'className', {
         get: function() {
-            return svg.getAttribute('class') || '';
+            return wrapper.getAttribute('class') || '';
         },
         set: function(val) {
-            return svg.setAttribute('class', val);
+            return wrapper.setAttribute('class', val);
         }
     });
 
@@ -26,10 +30,12 @@ function SVGCanvas(options) {
                 return svg.getAttribute(prop) | 0;
             },
             set: function(val) {
-                if (typeof val !== "undefined") {
-                    _this.ctx['__'+prop] = val;
-                    return svg.setAttribute(prop, val);
+                if (isNaN(val) || (typeof val === "undefined")) {
+                    return;
                 }
+                _this.ctx['__'+prop] = val;
+                svg.setAttribute(prop, val);
+                return wrapper[prop] = val;
             }
         });
     });
@@ -37,11 +43,11 @@ function SVGCanvas(options) {
     ["style", "id"].forEach(function(prop) {
         Object.defineProperty(_this, prop, {
             get: function() {
-                return svg[prop];
+                return wrapper[prop];
             },
             set: function(val) {
                 if (typeof val !== "undefined") {
-                    return svg.setAttribute(prop, val);
+                    return wrapper[prop] = val;
                 }
             }
         });
@@ -92,6 +98,11 @@ SVGCanvas.prototype.toDataURL = function(type, options) {
         }
     }
     throw new Error('Unknown type for SVGCanvas.prototype.toDataURL, please use image/jpeg | image/png | image/svg+xml.');
+};
+
+// will return wrapper element: <div><svg></svg></div>
+SVGCanvas.prototype.getElement = function() {
+    return this.wrapper;
 };
 
 module.exports = SVGCanvas;
