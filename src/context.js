@@ -182,4 +182,27 @@ Context.prototype.fillRect = function(x, y, w, h) {
     C2S.prototype.fillRect.call(this, x, y, w, h);
 };
 
+// Simple version of drawImage
+// Note that this version does not handle drawing mock context
+Context.prototype.drawImage = function() {
+    var canvas = document.createElement('canvas');
+    canvas.width = this.__width;
+    canvas.height = this.__height;
+    var args = arguments;
+    var ctx = canvas.getContext('2d');
+    ctx.drawImage.apply(ctx, args);
+    // Note: don't use foreign object,
+    // otherwise the saved SVG may be unusable for other application
+    var image = canvas.toDataURL('image/png');
+    image = this.__createElement('image', {
+        x: 0,
+        y: 0,
+        width: canvas.width,
+        height: canvas.height,
+        'xlink:href': image
+    });
+    var parent = this.__closestGroupOrSvg();
+    parent.appendChild(image);
+};
+
 module.exports = Context;
