@@ -1,5 +1,5 @@
 /*!!
- *  svgcanvas v0.7.0
+ *  svgcanvas v0.7.1
  *  Provide <canvas>'s element API and context API using SVG
  *
  *  Copyright (C) 2015 Zeno Zeng
@@ -1314,15 +1314,16 @@ Context.prototype.drawImage = function() {
     ctx.drawImage.apply(ctx, args);
     // Note: don't use foreign object,
     // otherwise the saved SVG may be unusable for other application
-    var image = canvas.toDataURL('image/png');
-    image = this.__createElement('image', {
+    var url = canvas.toDataURL('image/png');
+    var image = this.__createElement('image', {
         x: 0,
         y: 0,
         width: canvas.width,
         height: canvas.height,
-        'xlink:href': image
+        preserveAspectRatio: 'none'
     });
     var parent = this.__closestGroupOrSvg();
+    image.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", url);
     parent.appendChild(image);
 };
 
