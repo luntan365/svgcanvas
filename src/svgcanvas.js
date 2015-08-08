@@ -13,6 +13,7 @@ function SVGCanvas(options) {
 
     var wrapper = document.createElement('div');
     wrapper.style.display = 'inline-block';
+    wrapper.appendChild(svg);
     this.wrapper = wrapper;
 
     Object.defineProperty(this, 'className', {
