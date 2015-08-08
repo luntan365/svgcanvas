@@ -1,8 +1,8 @@
 {
   "name": "svgcanvas",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "description": "Provide <canvas>'s element API and context API using SVG",
-  "main": "index.js",
+  "main": "src/svgcanvas.js",
   "directories": {
     "test": "test"
   },
