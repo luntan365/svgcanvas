@@ -206,4 +206,6 @@ Context.prototype.drawImage = function() {
     parent.appendChild(image);
 };
 
+Context.prototype.getSerializedSvg = null;
+
 module.exports = Context;

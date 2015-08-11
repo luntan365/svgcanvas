@@ -1,5 +1,5 @@
 /*!!
- *  svgcanvas v0.7.4
+ *  svgcanvas v0.8.0
  *  Provide <canvas>'s element API and context API using SVG
  *
  *  Copyright (C) 2015 Zeno Zeng
@@ -1193,6 +1193,7 @@ define(function() {
         image.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", url);
         parent.appendChild(image);
     };
+    Context.prototype.getSerializedSvg = null;
     function SVGCanvas(options) {
         var debug = options && options.debug;
         this.ctx = new Context(100, 100, {debug: debug});
@@ -1253,7 +1254,7 @@ define(function() {
     };
     // you should always use URL.revokeObjectURL after your work done
     SVGCanvas.prototype.toObjectURL = function() {
-        var data = this.getContext('2d').getSerializedSvg();
+        var data = new XMLSerializer().serializeToString(this.svg);
         var svg = new Blob([data], {type: 'image/svg+xml;charset=utf-8'});
         return URL.createObjectURL(svg);
     };
