@@ -134,7 +134,7 @@ Context.prototype.__gc = function() {
                 elements = elements.filter(function(elem) {
                     // in case children may from live generation, gc from bottom to top
                     if (elem.children.length === 0) {
-                        elem.remove();
+                        elem.parentNode.removeChild(elem);
                         return false;
                     } else {
                         return true;
@@ -162,7 +162,7 @@ Context.prototype.clearRect = function(x, y, w, h) {
         this.generations.forEach(function(elems) {
             elems.forEach(function(elem) {
                 if (elem) {
-                    elem.remove();
+                    elem.parentNode.removeChild(elem);
                 }
             });
         });
