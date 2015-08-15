@@ -1,5 +1,5 @@
 /*!!
- *  svgcanvas v0.8.2
+ *  svgcanvas v0.8.3
  *  Provide <canvas>'s element API and context API using SVG
  *
  *  Copyright (C) 2015 Zeno Zeng
@@ -1254,7 +1254,8 @@ Context.prototype.__gc = function() {
                 lastCount = count;
                 elements = elements.filter(function(elem) {
                     // in case children may from live generation, gc from bottom to top
-                    if (elem.children.length === 0) {
+                    var children = elem.children || elem.childNodes; // childNodes for IE
+                    if (children.length === 0) {
                         elem.parentNode.removeChild(elem);
                         return false;
                     } else {

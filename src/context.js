@@ -133,7 +133,8 @@ Context.prototype.__gc = function() {
                 lastCount = count;
                 elements = elements.filter(function(elem) {
                     // in case children may from live generation, gc from bottom to top
-                    if (elem.children.length === 0) {
+                    var children = elem.children || elem.childNodes; // childNodes for IE
+                    if (children.length === 0) {
                         elem.parentNode.removeChild(elem);
                         return false;
                     } else {
