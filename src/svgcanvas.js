@@ -78,6 +78,21 @@ SVGCanvas.prototype.toObjectURL = function() {
 
 SVGCanvas.prototype.toDataURL = function(type, options) {
     var xml = new XMLSerializer().serializeToString(this.svg);
+
+    // documentMode is an IE-only property
+    // http://msdn.microsoft.com/en-us/library/ie/cc196988(v=vs.85).aspx
+    // http://stackoverflow.com/questions/10964966/detect-ie-version-prior-to-v9-in-javascript
+    var isIE = document.documentMode;
+
+    if (isIE) {
+        // This is patch from canvas2svg
+        // IE search for a duplicate xmnls because they didn't implement setAttributeNS correctly
+        var xmlns = /xmlns="http:\/\/www\.w3\.org\/2000\/svg".+xmlns="http:\/\/www\.w3\.org\/2000\/svg/gi;
+        if(xmlns.test(xml)) {
+            xml = xml.replace('xmlns="http://www.w3.org/2000/svg','xmlns:xlink="http://www.w3.org/1999/xlink');
+        }
+    }
+
     var SVGDataURL = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(xml);
     if (type === "image/svg+xml" || !type) {
         return SVGDataURL;
