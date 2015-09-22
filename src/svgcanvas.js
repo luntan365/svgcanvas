@@ -117,6 +117,10 @@ SVGCanvas.prototype.toDataURL = function(type, options) {
     throw new Error('Unknown type for SVGCanvas.prototype.toDataURL, please use image/jpeg | image/png | image/svg+xml.');
 };
 
+SVGCanvas.prototype.addEventListener = function() {
+    return this.svg.addEventListener.apply(this, arguments);
+};
+
 // will return wrapper element: <div><svg></svg></div>
 SVGCanvas.prototype.getElement = function() {
     return this.wrapper;

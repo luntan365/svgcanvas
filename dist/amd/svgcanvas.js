@@ -1,5 +1,5 @@
 /*!!
- *  svgcanvas v0.8.3
+ *  svgcanvas v0.9.0
  *  Provide <canvas>'s element API and context API using SVG
  *
  *  Copyright (C) 2015 Zeno Zeng
@@ -1295,6 +1295,9 @@ define(function() {
             }
         }
         throw new Error('Unknown type for SVGCanvas.prototype.toDataURL, please use image/jpeg | image/png | image/svg+xml.');
+    };
+    SVGCanvas.prototype.addEventListener = function() {
+        return this.svg.addEventListener.apply(this, arguments);
     };
     // will return wrapper element: <div><svg></svg></div>
     SVGCanvas.prototype.getElement = function() {
