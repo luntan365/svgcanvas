@@ -1,8 +1,8 @@
 /*!!
- *  svgcanvas v0.9.0
+ *  svgcanvas v0.10.0
  *  Provide <canvas>'s element API and context API using SVG
  *
- *  Copyright (C) 2015 Zeno Zeng
+ *  Copyright (C) 2015-2016 Zeno Zeng
  *  Licensed under the MIT license.
  *
  *  This program incorporates Gliffy Inc's canvas2svg,
@@ -1278,20 +1278,28 @@ Context.prototype.__gc = function() {
     }, 0);
 };
 
+/**
+ * Clear full canvas and do gc
+ * @private
+ */
+Context.prototype.__clearCanvas = function() {
+    // remove all
+    this.generations.forEach(function(elems) {
+        elems.forEach(function(elem) {
+            if (elem) {
+                elem.parentNode.removeChild(elem);
+            }
+        });
+    });
+    this.generations = [[]];
+    var g = this.__createElement('g');
+    this.__root.appendChild(g);
+    this.__currentElement = g;
+};
+
 Context.prototype.clearRect = function(x, y, w, h) {
     if (x === 0 && y === 0 && w === this.__width && h === this.__height) {
-        // remove all
-        this.generations.forEach(function(elems) {
-            elems.forEach(function(elem) {
-                if (elem) {
-                    elem.parentNode.removeChild(elem);
-                }
-            });
-        });
-        this.generations = [[]];
-        var g = this.__createElement('g');
-        this.__root.appendChild(g);
-        this.__currentElement = g;
+        this.__clearCanvas();
     } else {
         C2S.prototype.clearRect.call(this, x, y, w, h);
     }
