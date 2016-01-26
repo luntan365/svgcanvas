@@ -2,3 +2,4 @@ cp.sh
 test/coverage
 node_modules
 .tern-port
+.idea
